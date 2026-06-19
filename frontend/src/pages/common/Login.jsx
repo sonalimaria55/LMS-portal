@@ -71,7 +71,7 @@ const handleSubmit = async (e) => {
 
         // Redirect Based On Role
         const role = response.data.user.role;
-
+  console.log(role);
         if (role === "admin") {
             navigate("/admin/dashboard");
         } else if (role === "trainer") {
