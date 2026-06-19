@@ -29,7 +29,7 @@ const Login = () => {
     });
     const [loading, setLoading] = useState(false);
 
-    // Handle Input Changes
+    // Handle Input Changes -> handleChange
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -37,16 +37,14 @@ const Login = () => {
         });
     };
 
-    // Handle Login Submission
-   const handleSubmit = async (e) => {
+    // Handle Login Submission ->handleSubmit
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-        // Show Loading State
         setLoading(true);
 
-        // Call Login API
-        const { data } = await API.post(
+        const response = await API.post(
             "/auth/login",
             {
                 email: formData.email,
@@ -59,20 +57,20 @@ const Login = () => {
 
         // Store Access Token
         localStorage.setItem(
-            "accessToken",
-            data.accessToken
+            "token",
+            response.data.accessToken
         );
 
         // Store User Details
         localStorage.setItem(
             "user",
-            JSON.stringify(data.user)
+            JSON.stringify(response.data.user)
         );
 
-        alert(data.message);
+        alert(response.data.message);
 
         // Redirect Based On Role
-        const role = data.user.role;
+        const role = response.data.user.role;
 
         if (role === "admin") {
             navigate("/admin/dashboard");
