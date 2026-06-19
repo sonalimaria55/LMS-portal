@@ -37,45 +37,44 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const response = await API.post("/auth/register", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
-      });
+    const { data } = await API.post("/auth/register", {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
 
-      alert(response.data.message);
+    alert(data.message);
 
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
 
-       navigate("/login");
-    } catch (error) {
-      console.error(error);
+    navigate("/login");
+  } catch (error) {
+    console.error(error);
 
-      alert(
-        error.response?.data?.message ||
-        "Registration failed"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    alert(
+      error?.response?.data?.message ||
+      "Registration failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Box
