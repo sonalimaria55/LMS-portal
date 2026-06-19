@@ -4,7 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
-const authRoutes = require("./routes/authRoutes");
+
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 
 // Routes
-app.use("/api/auth", authRoutes);
+app.use("/api/auth",require("./routes/authRoutes"));
 
 
 app.get("/", (req, res) => {

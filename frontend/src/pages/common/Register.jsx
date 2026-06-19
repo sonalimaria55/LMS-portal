@@ -1,27 +1,29 @@
-
 import React, { useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import API from "../../api/API";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Paper,
   TextField,
   Typography,
   Button,
+  IconButton,
+  InputAdornment,
+  Link,
 } from "@mui/material";
 
-function Register() {
+import { Link as RouteLink } from "react-router-dom";
+
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+export default function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -30,7 +32,7 @@ function Register() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -38,68 +40,46 @@ function Register() {
       return;
     }
 
-    try {
-      setLoading(true);
-
-      const response = await API.post("/auth/register", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
-      });
-
-      alert(response.data.message);
-      console.log(response.data);
-
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-
-      navigate("/login");
-    } catch (error) {
-      console.error(error);
-
-      alert(
-        error.response?.data?.message ||
-        "Registration Failed"
-      );
-    } finally {
-      setLoading(false);
-    }
+    console.log(formData);
   };
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      sx={{ backgroundColor: "#f5f7fb" }}
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "#f8fafc",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        p: 2,
+      }}
     >
       <Paper
-        elevation={5}
+        elevation={4}
         sx={{
+          width: "100%",
+          maxWidth: 450,
           p: 4,
-          width: 420,
-          borderRadius: 3,
+          borderRadius: 4,
         }}
       >
-        <Typography
-          variant="h5"
-          textAlign="center"
-          mb={3}
-          fontWeight="bold"
-        >
-          Register
+        <Typography variant="h4" fontWeight={700} textAlign="center" mb={1}>
+          Create Account
         </Typography>
 
-        <form onSubmit={handleSubmit}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          textAlign="center"
+          mb={4}
+        >
+          Register to continue
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Name"
+            label="Full Name"
             name="name"
             margin="normal"
             value={formData.name}
@@ -109,7 +89,7 @@ function Register() {
 
           <TextField
             fullWidth
-            label="Email"
+            label="Email Address"
             name="email"
             type="email"
             margin="normal"
@@ -122,18 +102,34 @@ function Register() {
             fullWidth
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             margin="normal"
             value={formData.password}
             onChange={handleChange}
             required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
             fullWidth
             label="Confirm Password"
             name="confirmPassword"
-            type="password"
+            type={showPassword ? "text" : "password"}
             margin="normal"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -144,20 +140,27 @@ function Register() {
             fullWidth
             type="submit"
             variant="contained"
-            size="large"
-            sx={{ mt: 3 }}
-            disabled={loading}
+            sx={{
+              mt: 3,
+              py: 1.5,
+            }}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Register"
-            )}
+            Register
           </Button>
-        </form>
+
+          <Typography textAlign="center" mt={3}>
+            Already have an account?{" "}
+            <Link
+              component={RouteLink}
+              to="/login"
+              underline="hover"
+              fontWeight={600}
+            >
+              Login
+            </Link>
+          </Typography>
+        </Box>
       </Paper>
     </Box>
   );
 }
-
-export default Register;

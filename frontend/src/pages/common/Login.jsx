@@ -67,10 +67,7 @@ const Login = () => {
 
             alert(response.data.message);
 
-            
-
-
-
+        
             // Redirect User Based On Role
             const role = response.data.user.role;
 
@@ -218,31 +215,7 @@ const Login = () => {
                                 type={showPassword ? "text" : "password"}
                             />
 
-                            {/* <TextField
-                                fullWidth
-                                placeholder="Enter your password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                type={showPassword ? "text" : "password"}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() =>
-                                                    setShowPassword(!showPassword)
-                                                }
-                                            >
-                                                {showPassword ? (
-                                                    <VisibilityOff />
-                                                ) : (
-                                                    <Visibility />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            /> */}
+                           
 
                             <Box
                                 sx={{
