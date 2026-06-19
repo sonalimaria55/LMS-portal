@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-import api from "../../api/API";
+import API from "../../api/API";
 import loginBanner from "../../assets/login-banner.png";
 
 const Login = () => {
@@ -38,60 +38,61 @@ const Login = () => {
     };
 
     // Handle Login Submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            // Show Loading State
-            setLoading(true);
+    try {
+        // Show Loading State
+        setLoading(true);
 
-            // Call Login API
-            const response = await api.post(
-                "/auth/login",
-                formData,
-                {
-                    withCredentials: true,
-                }
-            );
-
-            // Store Access Token
-            localStorage.setItem(
-                "accessToken",
-                response.data.accessToken
-            );
-
-            //Storage User Details
-            localStorage.setItem("user",
-                JSON.stringify(response.data.user)
-            );
-
-            alert(response.data.message);
-
-        
-            // Redirect User Based On Role
-            const role = response.data.user.role;
-
-            if (role === "admin") {
-                navigate("/admin/dashboard");
-            } else if (role === "trainer") {
-                navigate("/trainer/dashboard");
-            } else if (role === "student") {
-                navigate("/student/dashboard");
+        // Call Login API
+        const { data } = await API.post(
+            "/auth/login",
+            {
+                email: formData.email,
+                password: formData.password,
+            },
+            {
+                withCredentials: true,
             }
+        );
 
-        } catch (error) {
+        // Store Access Token
+        localStorage.setItem(
+            "accessToken",
+            data.accessToken
+        );
 
-            // Handle Login Error
-            console.error(
-                error.response?.data?.message || "Login Failed"
-            );
+        // Store User Details
+        localStorage.setItem(
+            "user",
+            JSON.stringify(data.user)
+        );
 
-        } finally {
+        alert(data.message);
 
-            // Hide Loading State
-            setLoading(false);
+        // Redirect Based On Role
+        const role = data.user.role;
+
+        if (role === "admin") {
+            navigate("/admin/dashboard");
+        } else if (role === "trainer") {
+            navigate("/trainer/dashboard");
+        } else {
+            navigate("/student/dashboard");
         }
-    };
+
+    } catch (error) {
+        console.error(error);
+
+        alert(
+            error?.response?.data?.message ||
+            "Login Failed"
+        );
+    } finally {
+        setLoading(false);
+    }
+};
     return (
         <Box
             sx={{
