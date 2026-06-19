@@ -10,10 +10,12 @@ import {
   Link,
 } from "@mui/material";
 
-import { Link as RouteLink } from "react-router-dom";
+import { Link as RouteLink ,useNavigate} from "react-router-dom";
+import API from "../../api/API";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,6 +27,9 @@ export default function Register() {
     confirmPassword: "",
   });
 
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -32,7 +37,7 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -40,7 +45,36 @@ export default function Register() {
       return;
     }
 
-    console.log(formData);
+    try {
+      setLoading(true);
+
+      const response = await API.post("/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
+
+      alert(response.data.message);
+
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+       navigate("/login");
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Registration failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -140,14 +174,14 @@ export default function Register() {
             fullWidth
             type="submit"
             variant="contained"
-            sx={{
-              mt: 3,
-              py: 1.5,
-            }}
+            disabled={loading}
           >
-            Register
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Register"
+            )}
           </Button>
-
           <Typography textAlign="center" mt={3}>
             Already have an account?{" "}
             <Link
