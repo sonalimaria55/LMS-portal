@@ -6,7 +6,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 const cookieParser = require("cookie-parser");
-
+const authRoutes = require("./routes/authRoutes");
 const app = express();
 
 // DB connect
@@ -27,7 +27,8 @@ app.use(express.json());
 
 
 // Routes
-app.use("/api/auth",require("./routes/authRoutes"));
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/otp", require("./routes/OtpRoutes"));
 
 
 app.get("/", (req, res) => {

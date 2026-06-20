@@ -24,6 +24,14 @@ const loginUser = async (req, res) => {
       });
     }
 
+
+    if(!user.isRegistered){
+      return res.status(400).json({
+        success:false,
+        message:"please complete registration first",
+      });
+    }
+
     // Compare Password
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -94,61 +102,136 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
+
+
+
 const registerUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+    try {
+        const { name, email, password } = req.body;
 
-    // Validation
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
+        // Validation
+        if (!name || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required",
+            });
+        }
+
+        // Check if user exists
+        const user = await User.findOne({ email });
+
+        // ❌ If no user found → OTP not verified
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Please verify email first",
+            });
+        }
+
+        // ❌ Already registered check
+        if (user.isRegistered === true) {
+            return res.status(400).json({
+                success: false,
+                message: "User already registered",
+            });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update user
+        user.name = name;
+        user.password = hashedPassword;
+        user.isRegistered = true;
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Registration successful",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Server Error",
+        });
     }
-
-    // Check Existing User
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
-
-    // Hash Password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create User
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-
-
-    return res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-
-      },
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
-  }
 };
+
+
 module.exports = {
   loginUser, registerUser
 };
+
+
+
+
+
+// const registerUser = async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
+
+//     // Validation
+//     if (!name || !email || !password) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "All fields are required",
+//       });
+//     }
+
+//     // Check Existing User
+//     const existingUser = await User.findOne({ email });
+
+//     if (existingUser) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "User already exists",
+//       });
+//     }
+
+//     // Hash Password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Create User
+//     const user = await User.create({
+//       name,
+//       email,
+//       password: hashedPassword,
+//     });
+
+
+
+//     return res.status(201).json({
+//       success: true,
+//       message: "User registered successfully",
+//       user: {
+//         id: user._id,
+//         name: user.name,
+//         email: user.email,
+
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server Error",
+//     });
+//   }
+// };
+// module.exports = {
+//   loginUser, registerUser
+// };
 
 
