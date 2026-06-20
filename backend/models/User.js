@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            default:""
+            default: ""
         },
 
         email: {
@@ -14,20 +14,20 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            default:""
+            default: ""
         },
-        isRegistered:{
-            type:Boolean,
-            default:false
+        isRegistered: {
+            type: Boolean,
+            default: false
         },
         role: {
             type: String,
             enum: ["student", "admin", "trainer"],
-            default: "student",
+            default: "admin",
         },
-        isActive:{
-            type:Boolean,
-            default:true
+        isActive: {
+            type: Boolean,
+            default: true
         }
     },
     {

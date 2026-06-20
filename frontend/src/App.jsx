@@ -7,6 +7,7 @@ import Register from "./pages/common/Register";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import TrainerDashboard from "./pages/trainer/TrainerDahboard";
+import AdminLayout from "./pages/admin/AdminLayout";
 
 function App() {
   return (
@@ -21,25 +22,29 @@ function App() {
 
 
 
-  {/* Admin routes */}
-        <Route
-          path="/admin/dashboard"
-          element={<AdminDashboard />}
-        />
+      {/* Admin routes */}
+      <Route
+        path="/admin/dashboard"
+        element={<AdminDashboard />}
+      >
+        <Route index element={<Home />} />
 
-        {/* Trainer Routes */}
-        <Route
-          path="/trainer/dashboard"
-          element={<TrainerDashboard/>}
-        />
+      </Route>
 
-        {/* Student Routes */}
-        <Route
-          path="/student/dashboard"
-          element={<StudentDashboard />}
-        />
 
-      </Routes>
+      {/* Trainer Routes */}
+      <Route
+        path="/trainer/dashboard"
+        element={<TrainerDashboard />}
+      />
+
+      {/* Student Routes */}
+      <Route
+        path="/student/dashboard"
+        element={<StudentDashboard />}
+      />
+
+    </Routes>
 
   );
 }
