@@ -1,9 +1,11 @@
 import React from 'react'
 
-export default function TrainerDahboard() {
+const TrainerDahboard = () => {
   return (
     <div>
-      <h1>Trainer Dasboard</h1>
+      <h1>trainer</h1>
     </div>
   )
 }
+
+export default TrainerDahboard

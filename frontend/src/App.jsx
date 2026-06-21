@@ -40,7 +40,7 @@ function App() {
 
       {/* Trainer Routes */}
       <Route
-        path="/trainer/dashboard"
+        path="/trainer/dashboard" 
         element={<TrainerDashboard />}
       />
 

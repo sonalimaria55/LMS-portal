@@ -1,157 +1,127 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Grid,
+    Box,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    CircularProgress,
 } from "@mui/material";
-
-import SaveIcon from "@mui/icons-material/Save";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { useNavigate } from "react-router-dom";
 import API from "../../api/API";
 
-const AddTrainer = () => {
-  const navigate = useNavigate();
+function AddTrainer() {
+    const navigate = useNavigate();
 
-  const [trainer, setTrainer] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "trainer",
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setTrainer({
-      ...trainer,
-      [e.target.name]: e.target.value,
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: "trainer",
     });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const [loading, setLoading] = useState(false);
 
-    try {
-      setLoading(true);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-      const response = await API.post(
-        "/admin/trainers",
-        trainer
-      );
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
-      console.log("Response:", response.data);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-      alert("Trainer Added Successfully");
+        try {
+            setLoading(true);
 
-      navigate("/admin/trainers");
-    } catch (error) {
-      console.error(error);
-      alert(
-        error?.response?.data?.message ||
-          "Failed to add trainer"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+            const response = await API.post(
+                "/admin/trainers",
+                formData
+            );
 
-  return (
-    <Box sx={{ mt: 5 }}>
-      <Card
-        elevation={3}
-        sx={{
-          maxWidth: 800,
-          mx: "auto",
-          borderRadius: 3,
-        }}
-      >
-        <CardContent sx={{ p: 4 }}>
-          {/* Heading INSIDE card */}
-          <Typography variant="h5" fontWeight="bold">
-            Add Trainer
-          </Typography>
+            alert(response.data.message || "Trainer added successfully");
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mb: 4 }}
-          >
-            Create a new trainer account
-          </Typography>
+            navigate("/admin/dashboard/manageTrainers");
+        } catch (error) {
+            console.log(error);
 
-          <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              {/* Name */}
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  label="Trainer Name"
-                  name="name"
-                  value={trainer.name}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
+            alert(
+                error.response?.data?.message ||
+                "Failed to create trainer"
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
 
-              {/* Email */}
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  label="Email Address"
-                  type="email"
-                  name="email"
-                  value={trainer.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
+    return (
+        <Box sx={{ maxWidth: 600, mx: "auto" }}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+                
+                <Typography variant="h4" fontWeight="bold" gutterBottom>
+                    Add Trainer
+                </Typography>
 
-              {/* Password */}
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  name="password"
-                  value={trainer.password}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
+                <Typography color="text.secondary" sx={{ mb: 3 }}>
+                    Create a new trainer account.
+                </Typography>
 
-              {/* Buttons */}
-              <Grid size={{ xs: 12 }}>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    startIcon={<SaveIcon />}
-                    disabled={loading}
-                  >
-                    {loading ? "Saving..." : "Add Trainer"}
-                  </Button>
+                <form onSubmit={handleSubmit}>
+                    
+                    <TextField
+                        fullWidth
+                        label="Trainer Name"
+                        name="name"
+                        margin="normal"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
 
-                  <Button
-                    variant="outlined"
-                    startIcon={<ArrowBackIcon />}
-                    onClick={() => navigate("/admin/trainers")}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
-  );
-};
+                    <TextField
+                        fullWidth
+                        label="Email Address"
+                        name="email"
+                        type="email"
+                        margin="normal"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <TextField
+                        fullWidth
+                        label="Password"
+                        name="password"
+                        type="password"
+                        margin="normal"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        sx={{ mt: 3 }}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <CircularProgress size={24} color="inherit" />
+                        ) : (
+                            "Add Trainer"
+                        )}
+                    </Button>
+                </form>
+            </Paper>
+        </Box>
+    );
+}
 
 export default AddTrainer;
