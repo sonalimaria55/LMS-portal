@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Drawer,
   List,
@@ -8,14 +7,41 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SchoolIcon from "@mui/icons-material/School";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
-const drawerWidth = 240;
+import { useNavigate } from "react-router-dom";
 
-const AdminSidebar = () => {
+const drawerWidth = 250;
+
+function AdminSidebar() {
+  const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      text: "Dashboard",
+      icon: <DashboardIcon />,
+      path: "/admin/dashboard",
+    },
+    {
+      text: "Profile",
+      icon: <PersonIcon />,
+      path: "/admin/profile",
+    },
+    {
+      text: "Manage Trainers",
+      icon: <GroupsIcon />,
+      path: "/admin/dashboard/manageTrainers",
+    },
+    {
+      text: "Manage Students",
+      icon: <SchoolIcon />,
+      path: "/admin/students",
+    },
+  ];
+
   return (
     <Drawer
       variant="permanent"
@@ -31,37 +57,24 @@ const AdminSidebar = () => {
       <Toolbar />
 
       <List>
-        <ListItemButton>
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItemButton>
+        {menuItems.map((item) => (
+          <ListItemButton
+            key={item.text}
+            onClick={() => navigate(item.path)}
+          >
+            <ListItemIcon>
+              {item.icon}
+            </ListItemIcon>
 
-        <ListItemButton>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="Profile" />
-        </ListItemButton>
-
-        <ListItemButton>
-          <ListItemIcon>
-            <GroupsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Manage Trainers" />
-        </ListItemButton>
-
-        <ListItemButton>
-          <ListItemIcon>
-            <SchoolIcon />
-          </ListItemIcon>
-          <ListItemText primary="Manage Students" />
-        </ListItemButton>
+            <ListItemText
+              primary={item.text}
+            />
+          </ListItemButton>
+        ))}
       </List>
     </Drawer>
   );
-};
+}
 
 export default AdminSidebar;
 

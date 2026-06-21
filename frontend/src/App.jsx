@@ -8,6 +8,8 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import TrainerDashboard from "./pages/trainer/TrainerDahboard";
 import AdminLayout from "./pages/admin/AdminLayout";
+import ManageTrainers from "./pages/admin/ManageTrainers";
+import AddTrainer from "./pages/admin/AddTrainer"
 
 function App() {
   return (
@@ -25,9 +27,13 @@ function App() {
       {/* Admin routes */}
       <Route
         path="/admin/dashboard"
-        element={<AdminDashboard />}
+        element={<AdminLayout />}
       >
-        <Route index element={<Home />} />
+        <Route index element={<AdminDashboard />} />
+        <Route path="/admin/dashboard/manageTrainers" element={<ManageTrainers />} />
+        <Route path="/admin/dashboard/addTrainer"  element={<AddTrainer/>} />
+
+
 
       </Route>
 

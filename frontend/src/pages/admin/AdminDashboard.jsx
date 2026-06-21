@@ -1,108 +1,227 @@
-import React from "react";
-import { Box, Paper, Typography } from "@mui/material";
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+} from "@mui/material";
+
+import GroupsIcon from "@mui/icons-material/Groups";
+import SchoolIcon from "@mui/icons-material/School";
+import PersonIcon from "@mui/icons-material/Person";
 import AdminLayout from "./AdminLayout";
 
-const AdminDashboard = () => {
+
+function AdminDashboard() {
+  const stats = [
+    {
+      title: "Total Trainers",
+      count: 12,
+      icon: <GroupsIcon sx={{ fontSize: 50 }} />,
+    },
+    {
+      title: "Total Students",
+      count: 250,
+      icon: <SchoolIcon sx={{ fontSize: 50 }} />,
+    },
+    {
+      title: "Admin Profile",
+      count: "View",
+      icon: <PersonIcon sx={{ fontSize: 50 }} />,
+    },
+  ];
+
   return (
-    <AdminLayout>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        sx={{ mb: 4 }}
-      >
-        Dashboard
-      </Typography>
-
-      {/* Stats Cards */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "1fr 1fr",
-            lg: "repeat(4, 1fr)",
-          },
-          gap: 3,
-        }}
-      >
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
-          <Typography color="text.secondary">
-            Total Trainers
-          </Typography>
-
-          <Typography variant="h4" fontWeight="bold">
-            24
-          </Typography>
-        </Paper>
-
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
-          <Typography color="text.secondary">
-            Total Students
-          </Typography>
-
-          <Typography variant="h4" fontWeight="bold">
-            245
-          </Typography>
-        </Paper>
-
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
-          <Typography color="text.secondary">
-            Active Trainers
-          </Typography>
-
-          <Typography variant="h4" fontWeight="bold">
-            18
-          </Typography>
-        </Paper>
-
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
-          <Typography color="text.secondary">
-            Active Students
-          </Typography>
-
-          <Typography variant="h4" fontWeight="bold">
-            210
-          </Typography>
-        </Paper>
-      </Box>
-
-      {/* Recent Activity */}
-      <Paper
-        sx={{
-          mt: 4,
-          p: 3,
-          borderRadius: 3,
-        }}
-      >
+    
+      <Box>
         <Typography
-          variant="h6"
+          variant="h4"
           fontWeight="bold"
-          mb={2}
+          gutterBottom
         >
-          Recent Activities
+          Welcome Admin 👋
         </Typography>
 
-        <Typography sx={{ mb: 1 }}>
-          • New trainer registered
+        <Typography
+          color="text.secondary"
+          sx={{ mb: 4 }}
+        >
+          Manage trainers, students, and monitor platform activity.
         </Typography>
 
-        <Typography sx={{ mb: 1 }}>
-          • New student enrolled
-        </Typography>
+        <Grid container spacing={3}>
+          {stats.map((item, index) => (
+            <Grid
+              key={index}
+              size={{ xs: 12, sm: 6, md: 4 }}
+            >
+              <Card
+                sx={{
+                  p: 2,
+                  height: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  {item.icon}
 
-        <Typography sx={{ mb: 1 }}>
-          • Trainer profile updated
-        </Typography>
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    sx={{ mt: 2 }}
+                  >
+                    {item.count}
+                  </Typography>
 
-        <Typography>
-          • Student assigned to trainer
-        </Typography>
-      </Paper>
-    </AdminLayout>
+                  <Typography
+                    color="text.secondary"
+                  >
+                    {item.title}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Recent Activity */}
+        <Card sx={{ mt: 4 }}>
+          <CardContent>
+            <Typography
+              variant="h6"
+              gutterBottom
+            >
+              Recent Activity
+            </Typography>
+
+            <Typography>
+              • New student registered.
+            </Typography>
+
+            <Typography>
+              • Trainer account created.
+            </Typography>
+
+            <Typography>
+              • Student profile updated.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
+    
   );
-};
+}
 
 export default AdminDashboard;
+
+
+// import React from "react";
+// import { Box, Paper, Typography } from "@mui/material";
+
+
+// const AdminDashboard = () => {
+//   return (
+//     <>
+//       <Typography
+//         variant="h4"
+//         fontWeight="bold"
+//         sx={{ mb: 4 }}
+//       >
+//         Dashboard
+//       </Typography>
+
+//       {/* Stats Cards */}
+
+//       <Box
+//         sx={{
+//           display: "grid",
+//           gridTemplateColumns: {
+//             xs: "1fr",
+//             sm: "1fr 1fr",
+//             lg: "repeat(4, 1fr)",
+//           },
+//           gap: 3,
+//         }}
+//       >
+//         <Paper sx={{ p: 3, borderRadius: 3 }}>
+//           <Typography color="text.secondary">
+//             Total Trainers
+//           </Typography>
+
+//           <Typography variant="h4" fontWeight="bold">
+//             24
+//           </Typography>
+//         </Paper>
+
+//         <Paper sx={{ p: 3, borderRadius: 3 }}>
+//           <Typography color="text.secondary">
+//             Total Students
+//           </Typography>
+
+//           <Typography variant="h4" fontWeight="bold">
+//             245
+//           </Typography>
+//         </Paper>
+
+//         <Paper sx={{ p: 3, borderRadius: 3 }}>
+//           <Typography color="text.secondary">
+//             Active Trainers
+//           </Typography>
+
+//           <Typography variant="h4" fontWeight="bold">
+//             18
+//           </Typography>
+//         </Paper>
+
+//         <Paper sx={{ p: 3, borderRadius: 3 }}>
+//           <Typography color="text.secondary">
+//             Active Students
+//           </Typography>
+
+//           <Typography variant="h4" fontWeight="bold">
+//             210
+//           </Typography>
+//         </Paper>
+//       </Box>
+
+//       {/* Recent Activity */}
+//       <Paper
+//         sx={{
+//           mt: 4,
+//           p: 3,
+//           borderRadius: 3,
+//         }}
+//       >
+//         <Typography
+//           variant="h6"
+//           fontWeight="bold"
+//           mb={2}
+//         >
+//           Recent Activities
+//         </Typography>
+
+//         <Typography sx={{ mb: 1 }}>
+//           • New trainer registered
+//         </Typography>
+
+//         <Typography sx={{ mb: 1 }}>
+//           • New student enrolled
+//         </Typography>
+
+//         <Typography sx={{ mb: 1 }}>
+//           • Trainer profile updated
+//         </Typography>
+
+//         <Typography>
+//           • Student assigned to trainer
+//         </Typography>
+//       </Paper>
+//     </>
+//   );
+// };
+
+// export default AdminDashboard;
+//-----------------------------------------------
 
 // import React from "react";
 // import {
