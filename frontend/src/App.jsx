@@ -10,6 +10,7 @@ import TrainerDashboard from "./pages/trainer/TrainerDahboard";
 import AdminLayout from "./pages/admin/AdminLayout";
 import ManageTrainers from "./pages/admin/ManageTrainers";
 import AddTrainer from "./pages/admin/AddTrainer"
+import AdminEditTrainer from "./pages/admin/AdminEditTrainer";
 
 function App() {
   return (
@@ -25,24 +26,45 @@ function App() {
 
 
       {/* Admin routes */}
-      <Route
-        path="/admin/dashboard"
-        element={<AdminLayout />}
+      {/* <Route path="/admin/dashboard" element={<AdminLayout />}
       >
         <Route index element={<AdminDashboard />} />
         <Route path="/admin/dashboard/manageTrainers" element={<ManageTrainers />} />
-        <Route path="/admin/dashboard/addTrainer"  element={<AddTrainer/>} />
+        <Route path="/admin/dashboard/addTrainer" element={<AddTrainer />} />
+        <Route path="/admin/trainers/edit/:id" element={<AdminEditTrainer />}
+        />
+      </Route> */}
+
+      {/* spair admin routes */}
 
 
 
+      <Route path="/admin/dashboard" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+
+        <Route
+          path="manageTrainers"
+          element={<ManageTrainers />}
+        />
+
+        <Route
+          path="addTrainer"
+          element={<AddTrainer />}
+        />
+
+        <Route
+          path="trainers/edit/:id"
+          element={<AdminEditTrainer />}
+        />
       </Route>
 
 
       {/* Trainer Routes */}
       <Route
-        path="/trainer/dashboard" 
+        path="/trainer/dashboard"
         element={<TrainerDashboard />}
       />
+
 
       {/* Student Routes */}
       <Route

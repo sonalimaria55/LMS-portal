@@ -163,6 +163,9 @@ const deleteTrainer = async (req, res) => {
     });
   }
 };
+
+//Update trainer status
+
 const updateTrainerStatus = async (req, res) => {
   try {
     const trainer = await User.findById(req.params.id);
