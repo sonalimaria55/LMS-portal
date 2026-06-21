@@ -28,7 +28,7 @@ function AdminSidebar() {
     {
       text: "Profile",
       icon: <PersonIcon />,
-      path: "/admin/profile",
+      path: "/admin/dashboard/profile",
     },
     {
       text: "Manage Trainers",
@@ -38,8 +38,8 @@ function AdminSidebar() {
     {
       text: "Manage Students",
       icon: <SchoolIcon />,
-      path: "/admin/students",
-    },
+      path: "/admin/dashboard/students",
+    }
   ];
 
   return (

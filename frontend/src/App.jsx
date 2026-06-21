@@ -11,7 +11,8 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import ManageTrainers from "./pages/admin/ManageTrainers";
 import AddTrainer from "./pages/admin/AddTrainer"
 import AdminEditTrainer from "./pages/admin/AdminEditTrainer";
-
+import AdminProfile from "./pages/admin/AdminProfile";
+import AdminManageStudents from "./pages/admin/AdminManageStudents";
 function App() {
   return (
     <Routes>
@@ -38,9 +39,13 @@ function App() {
       {/* spair admin routes */}
 
 
-
       <Route path="/admin/dashboard" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
+
+        <Route
+          path="profile"
+          element={<AdminProfile />}
+        />
 
         <Route
           path="manageTrainers"
@@ -56,8 +61,12 @@ function App() {
           path="trainers/edit/:id"
           element={<AdminEditTrainer />}
         />
-      </Route>
 
+        <Route
+          path="students"
+          element={<AdminManageStudents />}
+        />
+      </Route>
 
       {/* Trainer Routes */}
       <Route
