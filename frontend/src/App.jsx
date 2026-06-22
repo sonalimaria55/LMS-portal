@@ -6,13 +6,22 @@ import Login from "./pages/common/Login";
 import Register from "./pages/common/Register";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import TrainerDashboard from "./pages/trainer/TrainerDahboard";
+import TrainerDashboard from "./pages/trainer/TrainerDashboard";
 import AdminLayout from "./pages/admin/AdminLayout";
 import ManageTrainers from "./pages/admin/ManageTrainers";
 import AddTrainer from "./pages/admin/AddTrainer"
 import AdminEditTrainer from "./pages/admin/AdminEditTrainer";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminManageStudents from "./pages/admin/AdminManageStudents";
+import ManageCourses from "./pages/trainer/ManageCourses";
+import AddCourse from "./pages/trainer/AddCourse";
+import EditCourse from "./pages/trainer/EditCourse";
+import TrainerCourseTopic from "./pages/trainer/TrainerCourseTopic";
+import AddTopic from "./pages/trainer/AddTopic";
+import TrainerLayout from "./pages/trainer/TrainerLayout";
+import TrainerNavbar from "./pages/trainer/TrainerNavbar";
+import TrainerDashboardHome from "./pages/trainer/TrainerDashboardHome";
+
 function App() {
   return (
     <Routes>
@@ -69,12 +78,25 @@ function App() {
       </Route>
 
       {/* Trainer Routes */}
-      <Route
+      {/* <Route
         path="/trainer/dashboard"
         element={<TrainerDashboard />}
-      />
+      /> */}
+      {/*Spair trainer routes */}
+      <Route path="/trainer/dashboard" element={<TrainerLayout />}>
 
+        {/* THIS FIXES BLANK PAGE */}
+        <Route index element={<TrainerDashboardHome />} />
+        <Route index element={<TrainerDashboard />} />
 
+        {/* Courses section */}
+        <Route path="courses">
+          <Route index element={<ManageCourses />} />
+          <Route path="add" element={<AddCourse />} />
+          <Route path="edit/:id" element={<EditCourse />} />
+        </Route>
+
+      </Route>
       {/* Student Routes */}
       <Route
         path="/student/dashboard"

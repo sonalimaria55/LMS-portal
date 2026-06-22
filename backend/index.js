@@ -8,6 +8,9 @@ const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 
+const isAdmin=require("./middleware/isAdmin");
+const isTrainer=require("./middleware/isTrainer");
+
 const app = express();
 
 // DB connect
@@ -32,7 +35,9 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/otp", require("./routes/OtpRoutes"));
 
 
-app.use("/api/admin", require("./routes/AdminRoutes"));
+app.use("/api/admin",isAdmin,require("./routes/AdminRoutes"));
+app.use("/api/trainer/course",isTrainer,require("./routes/courseRoutes"));
+
 
 
 

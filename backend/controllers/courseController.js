@@ -3,16 +3,29 @@ const Course = require("../models/Course");
 /* CREATE COURSE */
 const createCourse = async (req, res) => {
   try {
+    const { courseName, description } = req.body;
+
+    if (!courseName) {
+      return res.status(400).json({
+        success: false,
+        message: "Course name is required",
+      });
+    }
+
     const course = await Course.create({
-      ...req.body,
+      title: courseName,
+      description,
       trainer: req.user.id,
     });
 
     return res.status(201).json({
       success: true,
+      message: "Course created successfully",
       course,
     });
   } catch (error) {
+    console.error("CREATE COURSE ERROR:", error);
+
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -20,7 +33,7 @@ const createCourse = async (req, res) => {
   }
 };
 
-/* GET ALL COURSES (trainer only) */
+/* GET ALL COURSES */
 const getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find({
@@ -88,8 +101,14 @@ const updateCourse = async (req, res) => {
 
     const updatedCourse = await Course.findByIdAndUpdate(
       id,
-      req.body,
-      { new: true, runValidators: true }
+      {
+        title: req.body.courseName || req.body.title,
+        description: req.body.description,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     return res.status(200).json({

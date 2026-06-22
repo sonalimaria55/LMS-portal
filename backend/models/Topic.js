@@ -22,6 +22,7 @@ const topicSchema = new mongoose.Schema(
 
     videoUrl: {
       type: String,
+      required:true,
       default: "",
       trim: true,
     },
