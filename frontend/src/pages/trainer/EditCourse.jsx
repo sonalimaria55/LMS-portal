@@ -1,123 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-} from "@mui/material";
-
+import { Box, TextField, Button, Typography } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
 import API from "../../api/API";
 
 function EditCourse() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    courseName: "",
+  const [course, setCourse] = useState({
+    title: "",
     description: "",
+    price: "",
   });
 
+  // FETCH single course
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await API.get(`/trainer/course/${id}`);
-
-        setFormData({
-          courseName: res.data.course.title,
-          description: res.data.course.description,
-        });
+        const res = await API.get(`/trainer/courses/${id}`);
+        setCourse(res.data);
       } catch (err) {
-        console.log(err);
+        console.log("Fetch error:", err);
       }
     };
 
     fetchCourse();
   }, [id]);
 
+  // handle change
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setCourse({ ...course, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  // update course
+  const handleUpdate = async () => {
     try {
-      await API.put(`/trainer/course/${id}`, formData);
-
-      console.log("Course updated");
+      await API.put(`/trainer/courses/${id}`, course);
 
       navigate("/trainer/dashboard/courses");
     } catch (err) {
-      console.log(err);
+      console.log("Update error:", err);
     }
   };
 
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        gutterBottom
-      >
+    <Box p={3} maxWidth={500}>
+      <Typography variant="h5" mb={2}>
         Edit Course
       </Typography>
 
-      <Typography
-        color="text.secondary"
-        sx={{ mb: 3 }}
+      <TextField
+        fullWidth
+        label="Title"
+        name="title"
+        value={course.title}
+        onChange={handleChange}
+        margin="normal"
+      />
+
+      <TextField
+        fullWidth
+        label="Description"
+        name="description"
+        value={course.description}
+        onChange={handleChange}
+        margin="normal"
+      />
+
+      <TextField
+        fullWidth
+        label="Price"
+        name="price"
+        value={course.price}
+        onChange={handleChange}
+        margin="normal"
+      />
+
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleUpdate}
+        sx={{ mt: 2 }}
       >
-        Update course details.
-      </Typography>
-
-      <Card>
-        <CardContent>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-          >
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  label="Course Name"
-                  name="courseName"
-                  value={formData.courseName}
-                  onChange={handleChange}
-                  required
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12 }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  label="Description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                />
-              </Grid>
-
-              <Grid size={{ xs: 12 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                >
-                  Update Course
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </CardContent>
-      </Card>
+        Update Course
+      </Button>
     </Box>
   );
 }

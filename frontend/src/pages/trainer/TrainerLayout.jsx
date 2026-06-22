@@ -4,21 +4,33 @@ import TrainerSidebar from "./TrainerSidebar";
 
 function TrainerLayout() {
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      
-      {/* Top Navbar */}
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* TOP NAVBAR */}
       <TrainerNavbar />
 
-      {/* Body */}
+      {/* BODY */}
       <div style={{ display: "flex", flex: 1 }}>
+        
+        {/* SIDEBAR */}
+        <TrainerSidebar />
 
-        {/* Sidebar (placeholder for now) */}
-       <TrainerSidebar />
-        {/* Nested Pages Render Here */}
-        <div style={{ flex: 1, padding: "20px" }}>
+        {/* MAIN CONTENT */}
+        <div
+          style={{
+            flex: 1,
+            padding: "20px",
+            marginTop: "64px", // 🔥 THIS FIXES YOUR ISSUE
+            overflowY: "auto",
+          }}
+        >
           <Outlet />
         </div>
-
       </div>
     </div>
   );

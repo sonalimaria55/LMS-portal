@@ -83,20 +83,35 @@ function App() {
         element={<TrainerDashboard />}
       /> */}
       {/*Spair trainer routes */}
-      <Route path="/trainer/dashboard" element={<TrainerLayout />}>
+      {/* <Route path="/trainer/dashboard" element={<TrainerLayout />}>
 
-        {/* THIS FIXES BLANK PAGE */}
+
         <Route index element={<TrainerDashboardHome />} />
         <Route index element={<TrainerDashboard />} />
 
-        {/* Courses section */}
+      
         <Route path="courses">
           <Route index element={<ManageCourses />} />
           <Route path="add" element={<AddCourse />} />
           <Route path="edit/:id" element={<EditCourse />} />
         </Route>
 
+      </Route> */}
+
+      {/*------------------*/}
+
+
+        <Route path="/trainer/dashboard" element={<TrainerLayout />}>
+        <Route index element={<TrainerDashboardHome />} />
+
+        {/* COURSES MODULE */}
+        <Route path="courses">
+          <Route index element={<ManageCourses />} />
+          <Route path="add" element={<AddCourse />} />
+          <Route path="edit/:id" element={<EditCourse />} />
+        </Route>
       </Route>
+
       {/* Student Routes */}
       <Route
         path="/student/dashboard"
