@@ -8,26 +8,25 @@ const createTopic = async (req, res) => {
     try {
         const { topicName, description, videoUrl, course } = req.body;
 
-        console.log(req.body);
+        const lastTopic = await Topic.findOne({ course })
+            .sort({ order: -1 });
 
-        const count = await Topic.countDocuments({ course });
+        const nextOrder = lastTopic ? lastTopic.order + 1 : 1;
 
-        // 👇 ADD HERE
-        console.log("REQ USER =", req.user);
         const topic = await Topic.create({
             trainer: req.user.id,
             topicName,
             description,
             videoUrl,
             course,
-            order: count + 1,
+            order: nextOrder,
         });
-
 
         res.status(201).json({
             message: "Topic created successfully",
             topic,
         });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

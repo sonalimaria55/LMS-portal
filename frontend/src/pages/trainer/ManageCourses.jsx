@@ -158,12 +158,12 @@ function ManageCourses() {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      sx={{ mr: 1 }}
                       onClick={() =>
                         navigate(
                           `/trainer/dashboard/courses/topic/${course._id}`
                         )
                       }
+                      sx={{ mr: 1 }}
                     >
                       Topics
                     </Button>
