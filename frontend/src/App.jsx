@@ -138,10 +138,10 @@ function App() {
 />
 </Route>
       {/* Student Routes */}
-      <Route
-        path="/student/dashboard"
-        element={<StudentDashboard />}
-      />
+      
+
+
+  <Route path="/student/dashboard" element={<StudentDashboard />} />
 
     </Routes>
 

@@ -23,15 +23,31 @@ const createCourse = async (req, res) => {
 
 
 // Get All Courses
+
 const getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find()
+    let query = {};
+
+    // trainer sees only their courses
+    if (req.user.role === "trainer") {
+      query.trainer = req.user.id;
+    }
+
+    // student sees only published courses
+    if (req.user.role === "student") {
+      query.isPublished = true;
+    }
+
+    // admin sees everything (no filter)
+
+    const courses = await Course.find(query)
       .populate("trainer", "name email");
 
     res.status(200).json({
       success: true,
       data: courses,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -39,6 +55,22 @@ const getAllCourses = async (req, res) => {
     });
   }
 };
+// const getAllCourses = async (req, res) => {
+//   try {
+//     const courses = await Course.find()
+//       .populate("trainer", "name email");
+
+//     res.status(200).json({
+//       success: true,
+//       data: courses,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 // Get Single Course
 const getCourseById = async (req, res) => {
@@ -53,10 +85,19 @@ const getCourseById = async (req, res) => {
       });
     }
 
+    // ✅ ADD THIS HERE (RIGHT AFTER COURSE EXISTS CHECK)
+    if (req.user.role === "student" && !course.isPublished) {
+      return res.status(403).json({
+        success: false,
+        message: "Course not available",
+      });
+    }
+
     res.status(200).json({
       success: true,
       data: course,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -64,6 +105,29 @@ const getCourseById = async (req, res) => {
     });
   }
 };
+// const getCourseById = async (req, res) => {
+//   try {
+//     const course = await Course.findById(req.params.id)
+//       .populate("trainer", "name email");
+
+//     if (!course) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Course not found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: course,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 // Update Course
 const updateCourse = async (req, res) => {

@@ -38,9 +38,9 @@ app.use("/api/otp", require("./routes/OtpRoutes"));
 
 app.use("/api/admin",isAdmin,require("./routes/AdminRoutes"));
 
-app.use("/api/trainer/courses",isTrainer,require("./routes/courseRoutes"));
+app.use("/api/trainer/courses",require("./routes/courseRoutes"));
 
-app.use ("/api/trainer/topics",isTrainer,require("./routes/topicRoutes"))
+app.use ("/api/trainer/topics",require("./routes/topicRoutes"))
 
 
 

@@ -35,11 +35,11 @@ const isStudent = (req, res, next) => {
             decoded
         );
 
-        if (decoded.role !== "trainer") {
+        if (decoded.role !== "student") {
             return res.status(403).json({
                 success: false,
                 message:
-                    "Access denied. Trainer only.",
+                    "Access denied. student  only.",
             });
         }
 
@@ -64,4 +64,4 @@ const isStudent = (req, res, next) => {
     }
 };
 
-module.exports = isTrainer;
+module.exports = isStudent;

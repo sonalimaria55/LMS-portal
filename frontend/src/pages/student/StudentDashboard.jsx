@@ -1,11 +1,13 @@
-import React from 'react'
+import React from "react";
+import StudentLayout from "./StudentLayout";
+import StudentCourses from "./StudentCourses";
 
 function StudentDashboard() {
   return (
-    <div>
-      <h1>student dashboard</h1>
-    </div>
-  )
+    <StudentLayout>
+      <StudentCourses />
+    </StudentLayout>
+  );
 }
 
-export default StudentDashboard
+export default StudentDashboard;
