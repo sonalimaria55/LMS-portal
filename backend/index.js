@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const isAdmin=require("./middleware/isAdmin");
 const isTrainer=require("./middleware/isTrainer");
 
+
 const app = express();
 
 // DB connect
@@ -36,7 +37,10 @@ app.use("/api/otp", require("./routes/OtpRoutes"));
 
 
 app.use("/api/admin",isAdmin,require("./routes/AdminRoutes"));
-app.use("/api/trainer", isTrainer, require("./routes/courseRoutes"));
+//app.use("/api/trainer", isTrainer, require("./routes/courseRoutes"));
+app.use("/api/trainer/courses",isTrainer,require("./routes/courseRoutes"));
+//app.use("/api/trainer/topics",isTrainer,require("./routes/topicRoutes"));
+//app.use("/api/student/courses",isStudent,require("./routes/studentRoutes"));
 
 
 

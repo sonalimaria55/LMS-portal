@@ -108,6 +108,10 @@ function App() {
         <Route path="courses">
           <Route index element={<ManageCourses />} />
           <Route path="add" element={<AddCourse />} />
+         
+           <Route path="trainer/dashboard" element={< TrainerDashboard />} />
+            <Route path="trainer/TrainerDashboardHome" element={< TrainerDashboardHome />} />
+           
           <Route path="edit/:id" element={<EditCourse />} />
         </Route>
       </Route>

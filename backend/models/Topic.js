@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const topicSchema = new mongoose.Schema(
   {
+    trainer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
@@ -17,28 +23,23 @@ const topicSchema = new mongoose.Schema(
     description: {
       type: String,
       default: "",
-      trim: true,
     },
 
     videoUrl: {
       type: String,
-      required:true,
+      required: true,
       default: "",
-      trim: true,
     },
 
     order: {
       type: Number,
       required: true,
-      min: 1,
-    },
-
-    isFreePreview: {
-      type: Boolean,
-      default: false,
+      default: 1,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports = mongoose.model("Topic", topicSchema);

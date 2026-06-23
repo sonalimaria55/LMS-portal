@@ -1,89 +1,117 @@
 import React, { useEffect, useState } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import API from "../../api/API";
 
 function EditCourse() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [course, setCourse] = useState({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
-    price: "",
+    thumbnail: "",
   });
 
-  // FETCH single course
   useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const res = await API.get(`/trainer/courses/${id}`);
-        setCourse(res.data);
-      } catch (err) {
-        console.log("Fetch error:", err);
-      }
-    };
-
     fetchCourse();
-  }, [id]);
+  }, []);
 
-  // handle change
-  const handleChange = (e) => {
-    setCourse({ ...course, [e.target.name]: e.target.value });
+  const fetchCourse = async () => {
+    try {
+      const res = await API.get(`/trainer/courses/${id}`);
+
+      setFormData({
+        title: res.data.data.title || "",
+        description: res.data.data.description || "",
+        thumbnail: res.data.data.thumbnail || "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // update course
-  const handleUpdate = async () => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      await API.put(`/trainer/courses/${id}`, course);
+      await API.put(
+        `/trainer/courses/${id}`,
+        formData
+      );
+
+      alert("Course Updated Successfully");
 
       navigate("/trainer/dashboard/courses");
-    } catch (err) {
-      console.log("Update error:", err);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update course");
     }
   };
 
   return (
-    <Box p={3} maxWidth={500}>
-      <Typography variant="h5" mb={2}>
+    <Box
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        mt: 4,
+      }}
+    >
+      <Typography variant="h5" gutterBottom>
         Edit Course
       </Typography>
 
-      <TextField
-        fullWidth
-        label="Title"
-        name="title"
-        value={course.title}
-        onChange={handleChange}
-        margin="normal"
-      />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          fullWidth
+          label="Course Title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          margin="normal"
+          required
+        />
 
-      <TextField
-        fullWidth
-        label="Description"
-        name="description"
-        value={course.description}
-        onChange={handleChange}
-        margin="normal"
-      />
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          label="Description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          margin="normal"
+        />
 
-      <TextField
-        fullWidth
-        label="Price"
-        name="price"
-        value={course.price}
-        onChange={handleChange}
-        margin="normal"
-      />
+        <TextField
+          fullWidth
+          label="Thumbnail URL"
+          name="thumbnail"
+          value={formData.thumbnail}
+          onChange={handleChange}
+          margin="normal"
+        />
 
-      <Button
-        variant="contained"
-        fullWidth
-        onClick={handleUpdate}
-        sx={{ mt: 2 }}
-      >
-        Update Course
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: 2 }}
+        >
+          Update Course
+        </Button>
+      </form>
     </Box>
   );
 }

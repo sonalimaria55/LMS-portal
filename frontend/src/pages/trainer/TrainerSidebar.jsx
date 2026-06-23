@@ -14,6 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import { useNavigate } from "react-router-dom";
 
+
 const drawerWidth = 250;
 
 function TrainerSidebar() {
@@ -39,6 +40,11 @@ function TrainerSidebar() {
       text: "Edit Course",
       icon: <EditIcon />,
       path: "/trainer/dashboard/courses",
+    },
+     {
+      text: "TrainerDashboardhome",
+      icon:<EditIcon />,
+      path: "/trainer/dashboard/TrainerDashboardHome",
     },
   ];
 

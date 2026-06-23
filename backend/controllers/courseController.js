@@ -1,52 +1,35 @@
 const Course = require("../models/Course");
-const Topic = require("../models/Topic");
-
 
 // Create Course
-// Create Course
-// Create Course
+//temorary change
 const createCourse = async (req, res) => {
-  try {
-    const {
-      title,
-      description,
-      category,
-      thumbnail,
-    } = req.body;
+    try {
+        const course = await Course.create({
+            ...req.body,
+            trainer: req.user.id,
+        });
 
-    const course = await Course.create({
-      title,
-      description,
-      category,
-      thumbnail,
-      trainer: req.user.id,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Course created successfully",
-      data: course,
-    });
-  } catch (error) {
-    console.log("CREATE COURSE ERROR:", error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+        res.status(201).json({
+            success: true,
+            data: course,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
+
+
 // Get All Courses
 const getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find().populate(
-      "trainer",
-      "name email"
-    );
+    const courses = await Course.find()
+      .populate("trainer", "name email");
 
     res.status(200).json({
       success: true,
-      count: courses.length,
       data: courses,
     });
   } catch (error) {
@@ -57,13 +40,11 @@ const getAllCourses = async (req, res) => {
   }
 };
 
-// Get Course By Id
+// Get Single Course
 const getCourseById = async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id).populate(
-      "trainer",
-      "name email"
-    );
+    const course = await Course.findById(req.params.id)
+      .populate("trainer", "name email");
 
     if (!course) {
       return res.status(404).json({
@@ -105,7 +86,6 @@ const updateCourse = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Course updated successfully",
       data: course,
     });
   } catch (error) {
@@ -119,7 +99,9 @@ const updateCourse = async (req, res) => {
 // Delete Course
 const deleteCourse = async (req, res) => {
   try {
-    const course = await Course.findByIdAndDelete(req.params.id);
+    const course = await Course.findByIdAndDelete(
+      req.params.id
+    );
 
     if (!course) {
       return res.status(404).json({
@@ -158,9 +140,6 @@ const publishCourse = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `Course ${
-        course.isPublished ? "published" : "unpublished"
-      } successfully`,
       data: course,
     });
   } catch (error) {
