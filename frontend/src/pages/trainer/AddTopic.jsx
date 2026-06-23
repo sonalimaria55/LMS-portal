@@ -37,10 +37,12 @@ function AddTopic() {
       });
 
       navigate(
-        `/trainer/dashboard/courses/${courseId}`
+        `/trainer/dashboard/courses/topic/${courseId}`
       );
     } catch (error) {
       console.log(error.response);
+      console.log("ERROR STATUS:", error.response?.status);
+      console.log("ERROR DATA:", error.response?.data);
     }
   };
 

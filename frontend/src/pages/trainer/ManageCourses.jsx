@@ -1,5 +1,5 @@
+
 import React, { useEffect, useState } from "react";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import {
   Box,
   Typography,
@@ -32,19 +32,17 @@ function ManageCourses() {
   const navigate = useNavigate();
 
   const fetchCourses = async () => {
-  try {
-    const res = await API.get("/trainer/courses");
+    try {
+      const res = await API.get("/trainer/courses");
 
-    console.log("API RESPONSE:", res.data.data);
-    console.log("FIRST COURSE:", res.data.data[0]);
-    console.log("Current URL:", window.location.pathname);
-console.log("courseId =", courseId);
+      console.log("API RESPONSE:", res.data.data);
 
-    setCourses(res.data.data || []);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setCourses(res.data.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -95,12 +93,14 @@ console.log("courseId =", courseId);
         </Button>
       </Box>
 
-      {/* Search Box */}
+      {/* Search */}
       <TextField
         fullWidth
         placeholder="Search courses..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) =>
+          setSearchTerm(e.target.value)
+        }
         sx={{ mb: 3 }}
         InputProps={{
           startAdornment: (
@@ -111,7 +111,7 @@ console.log("courseId =", courseId);
         }}
       />
 
-      {/* Courses Table */}
+      {/* Table */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -130,75 +130,85 @@ console.log("courseId =", courseId);
 
               <TableCell align="center">
                 <strong>Actions</strong>
-
-
               </TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {filteredCourses.length > 0 ? (
-              filteredCourses.map((course) => {
-                console.log("COURSE OBJECT:", course);
+              filteredCourses.map((course) => (
+                <TableRow key={course._id}>
+                  <TableCell>
+                    {course.title}
+                  </TableCell>
 
-                return (
-                  <TableRow key={course._id}>
-                    <TableCell>{course.title}</TableCell>
+                  <TableCell>
+                    {course.description}
+                  </TableCell>
 
-                    <TableCell>{course.description}</TableCell>
+                  <TableCell>
+                    {course.isPublished
+                      ? "Published"
+                      : "Draft"}
+                  </TableCell>
 
-                    <TableCell>
-                      {course.isPublished ? "Published" : "Draft"}
-                    </TableCell>
+                  <TableCell align="center">
 
-                    <TableCell align="center">
+                    {/* Topics */}
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      sx={{ mr: 1 }}
+                      onClick={() =>
+                        navigate(
+                          `/trainer/dashboard/courses/topic/${course._id}`
+                        )
+                      }
+                    >
+                      Topics
+                    </Button>
 
-                      {/* Topics Button */}
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() =>
-                          navigate(`/trainer/dashboard/courses/${course._id}/topics`)
-                        }
-                        sx={{ mr: 1 }}
-                      >
-                        Topics
-                      </Button>
+                    {/* Add Topic */}
+                    <IconButton
+                      color="primary"
+                      onClick={() =>
+                        navigate(
+                          `/trainer/dashboard/courses/${course._id}/topics/add`
+                        )
+                      }
+                    >
+                      <EditIcon />
+                    </IconButton>
 
-                      {/* Edit Button (you are using it as Add Topic - OK for now) */}
-                      <IconButton
-                        color="primary"
-                        onClick={() =>
-                          navigate(
-                            `/trainer/dashboard/courses/${course._id}/topics/add`
-                          )
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
+                    {/* Delete */}
+                    <IconButton
+                      color="error"
+                      onClick={() =>
+                        handleDelete(course._id)
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
 
-                      {/* Delete */}
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(course._id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                    {/* Publish */}
+                    <IconButton
+                      color="success"
+                      onClick={() =>
+                        handlePublish(course._id)
+                      }
+                    >
+                      <PublishedWithChangesIcon />
+                    </IconButton>
 
-                      {/* Publish */}
-                      <IconButton
-                        color="success"
-                        onClick={() => handlePublish(course._id)}
-                      >
-                        <PublishedWithChangesIcon />
-                      </IconButton>
-
-                    </TableCell>
-                  </TableRow>
-                );
-              })
+                  </TableCell>
+                </TableRow>
+              ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} align="center">
+                <TableCell
+                  colSpan={4}
+                  align="center"
+                >
                   No Courses Found
                 </TableCell>
               </TableRow>
@@ -212,4 +222,3 @@ console.log("courseId =", courseId);
 }
 
 export default ManageCourses;
-

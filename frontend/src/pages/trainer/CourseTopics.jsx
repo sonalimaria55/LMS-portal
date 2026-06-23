@@ -21,7 +21,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import API from "../../api/API";
 
 function CourseTopics() {
-  const { id: courseId } = useParams();  //important scanario
+  const { courseId } = useParams();
+
+  console.log("Course ID:", courseId);
+
   const navigate = useNavigate();
 
   const [topics, setTopics] = useState([]);

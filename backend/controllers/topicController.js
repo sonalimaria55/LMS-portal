@@ -7,19 +7,22 @@ const Course = require("../models/Course");
 const createTopic = async (req, res) => {
     try {
         const { topicName, description, videoUrl, course } = req.body;
+
         console.log(req.body);
 
-        // 1. count existing topics in this course
         const count = await Topic.countDocuments({ course });
 
-        // 2. create topic with auto order
+        // 👇 ADD HERE
+        console.log("REQ USER =", req.user);
         const topic = await Topic.create({
+            trainer: req.user.id,
             topicName,
             description,
             videoUrl,
             course,
             order: count + 1,
         });
+
 
         res.status(201).json({
             message: "Topic created successfully",
@@ -29,7 +32,6 @@ const createTopic = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 // Get Topics By Course
 const getTopicsByCourse = async (req, res) => {
     try {

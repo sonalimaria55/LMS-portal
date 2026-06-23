@@ -102,22 +102,41 @@ function App() {
       </Route> */}
 
       {/*------------------*/}
-<Route path="/trainer/dashboard" element={<TrainerLayout />}>
-  <Route index element={<TrainerDashboardHome />} />
 
-  <Route path="courses">
-    <Route index element={<ManageCourses />} />
-    <Route path="add" element={<AddCourse />} />
-    <Route path="edit/:id" element={<EditCourse />} />
+<Route
+  path="/trainer/dashboard"
+  element={<TrainerLayout />}
+>
+  <Route
+    index
+    element={<ManageCourses />}
+  />
 
-    {/* <Route path="/topic/:id" element={<CourseTopics />} />
-    <Route path="/:courseId/topics/add" element={<AddTopic />} /> */}
+  <Route
+    path="/trainer/dashboard/courses"
+    element={<ManageCourses />}
+  />
 
-     <Route path=":courseId/topics" element={<CourseTopics />} />
-    <Route path=":courseId/topics/add" element={<AddTopic />} />
-  </Route>
+  <Route
+    path="/trainer/dashboard/courses/add"
+    element={<AddCourse />}
+  />
+
+  <Route
+    path="/trainer/dashboard/courses/edit/:id"
+    element={<EditCourse />}
+  />
+
+  <Route
+  path="/trainer/dashboard/courses/topic/:courseId"
+  element={<CourseTopics />}
+/>
+
+<Route
+  path="/trainer/dashboard/courses/:courseId/topics/add"
+  element={<AddTopic />}
+/>
 </Route>
-
       {/* Student Routes */}
       <Route
         path="/student/dashboard"
