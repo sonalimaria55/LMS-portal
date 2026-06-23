@@ -1,4 +1,5 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const TrainerDashboardHome = () => {
   return (
@@ -12,10 +13,13 @@ const TrainerDashboardHome = () => {
           <li>Total Courses: 5</li>
           <li>Active Students: 120</li>
           <li>Pending Reviews: 3</li>
+          <div>
+            
+          </div>
         </ul>
       </div>
     </div>
   );
 };
 
-export default TrainerDashboardHome;
+ export default TrainerDashboardHome;

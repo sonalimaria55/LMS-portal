@@ -16,11 +16,14 @@ import AdminManageStudents from "./pages/admin/AdminManageStudents";
 import ManageCourses from "./pages/trainer/ManageCourses";
 import AddCourse from "./pages/trainer/AddCourse";
 import EditCourse from "./pages/trainer/EditCourse";
-import TrainerCourseTopic from "./pages/trainer/TrainerCourseTopic";
+import TrainerCourseTopic from "./pages/trainer/CourseTopics";
 import AddTopic from "./pages/trainer/AddTopic";
 import TrainerLayout from "./pages/trainer/TrainerLayout";
 import TrainerNavbar from "./pages/trainer/TrainerNavbar";
 import TrainerDashboardHome from "./pages/trainer/TrainerDashboardHome";
+import CourseTopics from "./pages/trainer/CourseTopics";
+
+import TrainerSidebar from "./pages/trainer/TrainerSidebar";
 
 function App() {
   return (
@@ -99,22 +102,21 @@ function App() {
       </Route> */}
 
       {/*------------------*/}
+<Route path="/trainer/dashboard" element={<TrainerLayout />}>
+  <Route index element={<TrainerDashboardHome />} />
 
+  <Route path="courses">
+    <Route index element={<ManageCourses />} />
+    <Route path="add" element={<AddCourse />} />
+    <Route path="edit/:id" element={<EditCourse />} />
 
-        <Route path="/trainer/dashboard" element={<TrainerLayout />}>
-        <Route index element={<TrainerDashboardHome />} />
+    {/* <Route path="/topic/:id" element={<CourseTopics />} />
+    <Route path="/:courseId/topics/add" element={<AddTopic />} /> */}
 
-        {/* COURSES MODULE */}
-        <Route path="courses">
-          <Route index element={<ManageCourses />} />
-          <Route path="add" element={<AddCourse />} />
-         
-           <Route path="trainer/dashboard" element={< TrainerDashboard />} />
-            <Route path="trainer/TrainerDashboardHome" element={< TrainerDashboardHome />} />
-           
-          <Route path="edit/:id" element={<EditCourse />} />
-        </Route>
-      </Route>
+     <Route path=":courseId/topics" element={<CourseTopics />} />
+    <Route path=":courseId/topics/add" element={<AddTopic />} />
+  </Route>
+</Route>
 
       {/* Student Routes */}
       <Route

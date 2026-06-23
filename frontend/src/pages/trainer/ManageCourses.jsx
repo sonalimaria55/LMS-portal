@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import {
   Box,
   Typography,
@@ -11,29 +12,39 @@ import {
   TableRow,
   Paper,
   IconButton,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 
+import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { useNavigate } from "react-router-dom";
 import API from "../../api/API";
 
 function ManageCourses() {
   const [courses, setCourses] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const navigate = useNavigate();
 
   const fetchCourses = async () => {
-    try {
-      const res = await API.get("/trainer/courses");
+  try {
+    const res = await API.get("/trainer/courses");
 
-      setCourses(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    console.log("API RESPONSE:", res.data.data);
+    console.log("FIRST COURSE:", res.data.data[0]);
+    console.log("Current URL:", window.location.pathname);
+console.log("courseId =", courseId);
 
+    setCourses(res.data.data || []);
+  } catch (error) {
+    console.log(error);
+  }
+};
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -41,7 +52,6 @@ function ManageCourses() {
   const handleDelete = async (id) => {
     try {
       await API.delete(`/trainer/courses/${id}`);
-
       fetchCourses();
     } catch (error) {
       console.log(error);
@@ -51,27 +61,32 @@ function ManageCourses() {
   const handlePublish = async (id) => {
     try {
       await API.patch(`/trainer/courses/${id}/publish`);
-
       fetchCourses();
     } catch (error) {
       console.log(error);
     }
   };
 
+  const filteredCourses = courses.filter((course) =>
+    course.title?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Box p={3}>
+      {/* Header */}
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h4">
+        <Typography variant="h4" fontWeight="bold">
           Manage Courses
         </Typography>
 
         <Button
           variant="contained"
+          startIcon={<AddCircleIcon />}
           onClick={() =>
             navigate("/trainer/dashboard/courses/add")
           }
@@ -80,6 +95,23 @@ function ManageCourses() {
         </Button>
       </Box>
 
+      {/* Search Box */}
+      <TextField
+        fullWidth
+        placeholder="Search courses..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ mb: 3 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      {/* Courses Table */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -96,71 +128,83 @@ function ManageCourses() {
                 <strong>Status</strong>
               </TableCell>
 
-              <TableCell>
+              <TableCell align="center">
                 <strong>Actions</strong>
+
+
               </TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
-            {courses.map((course) => (
-              <TableRow key={course._id}>
-                <TableCell>{course.title}</TableCell>
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map((course) => {
+                console.log("COURSE OBJECT:", course);
 
-                <TableCell>
-                  {course.description}
-                </TableCell>
+                return (
+                  <TableRow key={course._id}>
+                    <TableCell>{course.title}</TableCell>
 
-                <TableCell>
-                  {course.isPublished
-                    ? "Published"
-                    : "Draft"}
-                </TableCell>
+                    <TableCell>{course.description}</TableCell>
 
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() =>
-                      navigate(
-                        `/trainer/dashboard/courses/edit/${course._id}`
-                      )
-                    }
-                  >
-                    <EditIcon />
-                  </IconButton>
+                    <TableCell>
+                      {course.isPublished ? "Published" : "Draft"}
+                    </TableCell>
 
-                  <IconButton
-                    color="error"
-                    onClick={() =>
-                      handleDelete(course._id)
-                    }
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                    <TableCell align="center">
 
-                  <IconButton
-                    color="success"
-                    onClick={() =>
-                      handlePublish(course._id)
-                    }
-                  >
-                    <PublishedWithChangesIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                      {/* Topics Button */}
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() =>
+                          navigate(`/trainer/dashboard/courses/${course._id}/topics`)
+                        }
+                        sx={{ mr: 1 }}
+                      >
+                        Topics
+                      </Button>
 
-            {courses.length === 0 && (
+                      {/* Edit Button (you are using it as Add Topic - OK for now) */}
+                      <IconButton
+                        color="primary"
+                        onClick={() =>
+                          navigate(
+                            `/trainer/dashboard/courses/${course._id}/topics/add`
+                          )
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+
+                      {/* Delete */}
+                      <IconButton
+                        color="error"
+                        onClick={() => handleDelete(course._id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+
+                      {/* Publish */}
+                      <IconButton
+                        color="success"
+                        onClick={() => handlePublish(course._id)}
+                      >
+                        <PublishedWithChangesIcon />
+                      </IconButton>
+
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
               <TableRow>
-                <TableCell
-                  colSpan={4}
-                  align="center"
-                >
+                <TableCell colSpan={4} align="center">
                   No Courses Found
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
+
         </Table>
       </TableContainer>
     </Box>
@@ -168,3 +212,4 @@ function ManageCourses() {
 }
 
 export default ManageCourses;
+

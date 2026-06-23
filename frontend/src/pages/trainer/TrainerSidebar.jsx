@@ -41,11 +41,11 @@ function TrainerSidebar() {
       icon: <EditIcon />,
       path: "/trainer/dashboard/courses",
     },
-     {
-      text: "TrainerDashboardhome",
-      icon:<EditIcon />,
-      path: "/trainer/dashboard/TrainerDashboardHome",
-    },
+    {
+      text: "TrainerDashboardHome",
+      icon: <EditIcon />,
+      path: "/trainer/dashboard",
+    }
   ];
 
   return (
