@@ -5,39 +5,15 @@ import {
   CardMedia,
   CardContent,
   Typography,
+  Button,
   CircularProgress,
   Container,
-  Button,
-  Avatar,
-  Stack,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "../../api/API";
 
-const getRandomColor = (str = "") => {
-  const colors = [
-    "#1e293b",
-    "#0f766e",
-    "#1d4ed8",
-    "#6d28d9",
-    "#be185d",
-    "#c2410c",
-  ];
-
-  let hash = 0;
-
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  return colors[Math.abs(hash) % colors.length];
-};
-
 function StudentCourses() {
-  const navigate = useNavigate();
-
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -46,21 +22,15 @@ function StudentCourses() {
       setLoading(true);
 
       const response = await API.get(
-        "/trainer/courses"
+        "/student/courses"
       );
 
       if (response.data.success) {
-        setCourses(
-          response.data.data || []
-        );
+        setCourses(response.data.data);
       }
     } catch (error) {
-      console.error(error);
-
-      alert(
-        error.response?.data?.message ||
-          "Failed to fetch courses"
-      );
+      console.log(error);
+      alert("Failed to load courses");
     } finally {
       setLoading(false);
     }
@@ -69,6 +39,14 @@ function StudentCourses() {
   useEffect(() => {
     getCourses();
   }, []);
+
+  const handleEnroll = (courseId) => {
+    console.log("Enroll:", courseId);
+
+    alert(
+      "Enrollment feature will be added next."
+    );
+  };
 
   if (loading) {
     return (
@@ -86,229 +64,426 @@ function StudentCourses() {
   }
 
   return (
-    <Box
-      sx={{
-        background:
-          "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
-        minHeight: "100vh",
-        py: 4,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          gutterBottom
-          sx={{
-            color: "#0f172a",
-          }}
-        >
-          Available Courses
-        </Typography>
+    <Container maxWidth="xl" sx={{ mt: 4 }}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        gutterBottom
+      >
+        Available Courses
+      </Typography>
 
-        <Typography
-          color="text.secondary"
-          sx={{ mb: 4 }}
-        >
-          Explore and start learning from
-          available courses.
-        </Typography>
+      <Typography
+        color="text.secondary"
+        sx={{ mb: 4 }}
+      >
+        Explore and enroll in courses.
+      </Typography>
 
-        <Grid container spacing={3}>
-          {courses.length === 0 ? (
-            <Grid size={12}>
-              <Typography
-                textAlign="center"
-                color="text.secondary"
-              >
-                No courses available.
-              </Typography>
-            </Grid>
-          ) : (
-            courses.map((course) => (
-              <Grid
-                key={course._id}
-                size={{
-                  xs: 12,
-                  sm: 6,
-                  lg: 4,
+      <Grid container spacing={3}>
+        {courses.length === 0 ? (
+          <Grid size={12}>
+            <Typography textAlign="center">
+              No Courses Available
+            </Typography>
+          </Grid>
+        ) : (
+          courses.map((course) => (
+            <Grid
+              key={course._id}
+              size={{
+                xs: 12,
+                sm: 6,
+                md: 4,
+              }}
+            >
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: 3,
+                  boxShadow: 3,
                 }}
               >
-                <Card
+                <CardMedia
+                  component="img"
+                  height="180"
+                  image={
+                    course.thumbnail ||
+                    "https://via.placeholder.com/400x200?text=Course"
+                  }
+                  alt={course.title}
+                />
+
+                <CardContent
                   sx={{
-                    display: "flex",
-                    height: 220,
-                    borderRadius: 4,
-                    overflow: "hidden",
-                    boxShadow: 3,
-                    transition: "0.3s",
-                    "&:hover": {
-                      transform:
-                        "translateY(-5px)",
-                      boxShadow: 6,
-                    },
+                    flexGrow: 1,
                   }}
                 >
-                  {/* Left Image */}
-                  <CardMedia
-                    component="img"
-                    image={
-                      course.image ||
-                      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200"
-                    }
-                    alt={course.title}
-                    sx={{
-                      width: 180,
-                      objectFit: "cover",
-                    }}
-                  />
-
-                  {/* Right Content */}
-                  <CardContent
-                    sx={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    gutterBottom
                   >
-                    <Stack
-                      direction="row"
-                      spacing={1.5}
-                      alignItems="center"
-                      mb={1.5}
-                    >
-                      <Avatar
-                        sx={{
-                          bgcolor:
-                            getRandomColor(
-                              course.title
-                            ),
-                          width: 38,
-                          height: 38,
-                        }}
-                      >
-                        {course.title
-                          ?.charAt(0)
-                          ?.toUpperCase()}
-                      </Avatar>
+                    {course.title}
+                  </Typography>
 
-                      <Typography
-                        variant="h6"
-                        fontWeight="700"
-                        sx={{
-                          lineHeight: 1.2,
-                          display:
-                            "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient:
-                            "vertical",
-                          overflow: "hidden",
-                        }}
-                      >
-                        {course.title}
-                      </Typography>
-                    </Stack>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                  >
+                    {course.description}
+                  </Typography>
 
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        flexGrow: 1,
-                        overflow: "hidden",
-                        display:
-                          "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient:
-                          "vertical",
-                      }}
-                    >
-                      {course.description}
-                    </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    color="primary"
+                  >
+                    Trainer
+                  </Typography>
 
-                    {/* Trainer Section */}
-                    <Box
-                      sx={{
-                        p: 1.2,
-                        bgcolor: "#f8fafc",
-                        borderRadius: 2,
-                        mt: 1,
-                        mb: 1,
-                        border:
-                          "1px solid #e2e8f0",
-                      }}
-                    >
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: "#64748b",
-                          fontWeight: 700,
-                          letterSpacing:
-                            0.5,
-                        }}
-                      >
-                        COURSE TRAINER
-                      </Typography>
+                  <Typography>
+                    {course.trainer?.name ||
+                      "Unknown Trainer"}
+                  </Typography>
+                </CardContent>
 
-                      <Typography
-                        fontWeight="600"
-                        fontSize="0.95rem"
-                        sx={{
-                          color:
-                            "#0f172a",
-                        }}
-                      >
-                        {course.trainer
-                          ?.name ||
-                          "Trainer"}
-                      </Typography>
-
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color:
-                            "#94a3b8",
-                        }}
-                      >
-                        {course.trainer
-                          ?.email || ""}
-                      </Typography>
-                    </Box>
-
-                    <Button
-                      variant="contained"
-                      size="small"
-                      sx={{
-                        textTransform:
-                          "none",
-                        borderRadius: 2,
-                        fontWeight: 600,
-                        backgroundColor:
-                          "#0f172a",
-                        "&:hover": {
-                          backgroundColor:
-                            "#1e293b",
-                        },
-                      }}
-                      onClick={() =>
-                        navigate(
-                          `/student/courses/${course._id}`
-                        )
-                      }
-                    >
-                      View Course
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          )}
-        </Grid>
-      </Container>
-    </Box>
+                <Box p={2}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={() =>
+                      handleEnroll(course._id)
+                    }
+                  >
+                    Enroll Course
+                  </Button>
+                </Box>
+              </Card>
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Container>
   );
 }
 
 export default StudentCourses;
+
+
+// import {
+//   Box,
+//   Grid,
+//   Card,
+//   CardMedia,
+//   CardContent,
+//   Typography,
+//   CircularProgress,
+//   Container,
+//   Button,
+//   Avatar,
+//   Stack,
+// } from "@mui/material";
+
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import API from "../../api/API";
+
+// const getRandomColor = (str = "") => {
+//   const colors = [
+//     "#1e293b",
+//     "#0f766e",
+//     "#1d4ed8",
+//     "#6d28d9",
+//     "#be185d",
+//     "#c2410c",
+//   ];
+
+//   let hash = 0;
+
+//   for (let i = 0; i < str.length; i++) {
+//     hash = str.charCodeAt(i) + ((hash << 5) - hash);
+//   }
+
+//   return colors[Math.abs(hash) % colors.length];
+// };
+
+// function StudentCourses() {
+//   const navigate = useNavigate();
+
+//   const [courses, setCourses] = useState([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const getCourses = async () => {
+//     try {
+//       setLoading(true);
+
+//       const response = await API.get(
+//         "/trainer/courses"
+//       );
+
+//       if (response.data.success) {
+//         setCourses(
+//           response.data.data || []
+//         );
+//       }
+//     } catch (error) {
+//       console.error(error);
+
+//       alert(
+//         error.response?.data?.message ||
+//           "Failed to fetch courses"
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     getCourses();
+//   }, []);
+
+//   if (loading) {
+//     return (
+//       <Box
+//         sx={{
+//           display: "flex",
+//           justifyContent: "center",
+//           alignItems: "center",
+//           minHeight: "80vh",
+//         }}
+//       >
+//         <CircularProgress />
+//       </Box>
+//     );
+//   }
+
+//   return (
+//     <Box
+//       sx={{
+//         background:
+//           "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+//         minHeight: "100vh",
+//         py: 4,
+//       }}
+//     >
+//       <Container maxWidth="xl">
+//         <Typography
+//           variant="h4"
+//           fontWeight="bold"
+//           gutterBottom
+//           sx={{
+//             color: "#0f172a",
+//           }}
+//         >
+//           Available Courses
+//         </Typography>
+
+//         <Typography
+//           color="text.secondary"
+//           sx={{ mb: 4 }}
+//         >
+//           Explore and start learning from
+//           available courses.
+//         </Typography>
+
+//         <Grid container spacing={3}>
+//           {courses.length === 0 ? (
+//             <Grid size={12}>
+//               <Typography
+//                 textAlign="center"
+//                 color="text.secondary"
+//               >
+//                 No courses available.
+//               </Typography>
+//             </Grid>
+//           ) : (
+//             courses.map((course) => (
+//               <Grid
+//                 key={course._id}
+//                 size={{
+//                   xs: 12,
+//                   sm: 6,
+//                   lg: 4,
+//                 }}
+//               >
+//                 <Card
+//                   sx={{
+//                     display: "flex",
+//                     height: 220,
+//                     borderRadius: 4,
+//                     overflow: "hidden",
+//                     boxShadow: 3,
+//                     transition: "0.3s",
+//                     "&:hover": {
+//                       transform:
+//                         "translateY(-5px)",
+//                       boxShadow: 6,
+//                     },
+//                   }}
+//                 >
+//                   {/* Left Image */}
+//                   <CardMedia
+//                     component="img"
+//                     image={
+//                       course.image ||
+//                       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200"
+//                     }
+//                     alt={course.title}
+//                     sx={{
+//                       width: 180,
+//                       objectFit: "cover",
+//                     }}
+//                   />
+
+//                   {/* Right Content */}
+//                   <CardContent
+//                     sx={{
+//                       flex: 1,
+//                       display: "flex",
+//                       flexDirection: "column",
+//                     }}
+//                   >
+//                     <Stack
+//                       direction="row"
+//                       spacing={1.5}
+//                       alignItems="center"
+//                       mb={1.5}
+//                     >
+//                       <Avatar
+//                         sx={{
+//                           bgcolor:
+//                             getRandomColor(
+//                               course.title
+//                             ),
+//                           width: 38,
+//                           height: 38,
+//                         }}
+//                       >
+//                         {course.title
+//                           ?.charAt(0)
+//                           ?.toUpperCase()}
+//                       </Avatar>
+
+//                       <Typography
+//                         variant="h6"
+//                         fontWeight="700"
+//                         sx={{
+//                           lineHeight: 1.2,
+//                           display:
+//                             "-webkit-box",
+//                           WebkitLineClamp: 2,
+//                           WebkitBoxOrient:
+//                             "vertical",
+//                           overflow: "hidden",
+//                         }}
+//                       >
+//                         {course.title}
+//                       </Typography>
+//                     </Stack>
+
+//                     <Typography
+//                       variant="body2"
+//                       color="text.secondary"
+//                       sx={{
+//                         flexGrow: 1,
+//                         overflow: "hidden",
+//                         display:
+//                           "-webkit-box",
+//                         WebkitLineClamp: 3,
+//                         WebkitBoxOrient:
+//                           "vertical",
+//                       }}
+//                     >
+//                       {course.description}
+//                     </Typography>
+
+//                     {/* Trainer Section */}
+//                     <Box
+//                       sx={{
+//                         p: 1.2,
+//                         bgcolor: "#f8fafc",
+//                         borderRadius: 2,
+//                         mt: 1,
+//                         mb: 1,
+//                         border:
+//                           "1px solid #e2e8f0",
+//                       }}
+//                     >
+//                       <Typography
+//                         variant="caption"
+//                         sx={{
+//                           color: "#64748b",
+//                           fontWeight: 700,
+//                           letterSpacing:
+//                             0.5,
+//                         }}
+//                       >
+//                         COURSE TRAINER
+//                       </Typography>
+
+//                       <Typography
+//                         fontWeight="600"
+//                         fontSize="0.95rem"
+//                         sx={{
+//                           color:
+//                             "#0f172a",
+//                         }}
+//                       >
+//                         {course.trainer
+//                           ?.name ||
+//                           "Trainer"}
+//                       </Typography>
+
+//                       <Typography
+//                         variant="caption"
+//                         sx={{
+//                           color:
+//                             "#94a3b8",
+//                         }}
+//                       >
+//                         {course.trainer
+//                           ?.email || ""}
+//                       </Typography>
+//                     </Box>
+
+//                     <Button
+//                       variant="contained"
+//                       size="small"
+//                       sx={{
+//                         textTransform:
+//                           "none",
+//                         borderRadius: 2,
+//                         fontWeight: 600,
+//                         backgroundColor:
+//                           "#0f172a",
+//                         "&:hover": {
+//                           backgroundColor:
+//                             "#1e293b",
+//                         },
+//                       }}
+//                       onClick={() =>
+//                         navigate(
+//                           `/student/courses/${course._id}`
+//                         )
+//                       }
+//                     >
+//                       View Course
+//                     </Button>
+//                   </CardContent>
+//                 </Card>
+//               </Grid>
+//             ))
+//           )}
+//         </Grid>
+//       </Container>
+//     </Box>
+//   );
+// }
+
+// export default StudentCourses;
 
 
 

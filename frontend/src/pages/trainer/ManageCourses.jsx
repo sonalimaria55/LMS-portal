@@ -200,6 +200,23 @@ function ManageCourses() {
                       <PublishedWithChangesIcon />
                     </IconButton>
 
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color={
+                        course.isPublished
+                          ? "success"
+                          : "primary"
+                      }
+                      onClick={() =>
+                        handlePublish(course._id)
+                      }
+                    >
+                      {course.isPublished
+                        ? "Published"
+                        : "Publish"}
+                    </Button>
+
                   </TableCell>
                 </TableRow>
               ))

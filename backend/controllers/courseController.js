@@ -2,11 +2,39 @@ const Course = require("../models/Course");
 
 // Create Course
 //temorary change
+// const createCourse = async (req, res) => {
+//   try {
+//     const course = await Course.create({
+//       ...req.body,
+//       trainer: req.user.id,
+
+//     });
+// console.log("USER:", req.user);
+//     res.status(201).json({
+//       success: true,
+//       data: course,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 const createCourse = async (req, res) => {
   try {
+    console.log("USER:", req.user);
+
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: user not found in request",
+      });
+    }
+
     const course = await Course.create({
       ...req.body,
-      trainer: req.user.id,
+      trainer: req.user._id || req.user.id,
     });
 
     res.status(201).json({
@@ -25,8 +53,9 @@ const createCourse = async (req, res) => {
 // Get All Courses
 const getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find()
-      .populate("trainer", "name email");
+    const courses = await Course.find({
+      trainer: req.user._id || req.user.id,
+    }).populate("trainer", "name email");
 
     res.status(200).json({
       success: true,
@@ -39,6 +68,7 @@ const getAllCourses = async (req, res) => {
     });
   }
 };
+
 
 // Get Single Course
 const getCourseById = async (req, res) => {

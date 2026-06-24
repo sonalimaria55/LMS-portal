@@ -6,6 +6,9 @@ const Course = require("../models/Course");
 
 const createTopic = async (req, res) => {
     try {
+
+         console.log("BODY:", req.body);
+    console.log("USER:", req.user);
         const { topicName, description, videoUrl, course } = req.body;
 
         const lastTopic = await Topic.findOne({ course })
@@ -37,6 +40,7 @@ const getTopicsByCourse = async (req, res) => {
         const { courseId } = req.params;
 
         const topics = await Topic.find({
+             trainer: req.user.id,
             course: courseId,
         }).sort({ order: 1 });
 

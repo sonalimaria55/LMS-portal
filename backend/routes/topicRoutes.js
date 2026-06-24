@@ -8,7 +8,7 @@ const {
   deleteTopic,
 } = require("../controllers/topicController");
 
-const isTrainer = require("../middleware/isTrainer");
+
 
 
 
