@@ -160,7 +160,7 @@ function ManageCourses() {
                       color="secondary"
                       onClick={() =>
                         navigate(
-                          `/trainer/dashboard/courses/topic/${course._id}`
+                          `/trainer/dashboard/courses/${course._id}/topics`
                         )
                       }
                       sx={{ mr: 1 }}

@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import {
   Paper,
@@ -36,9 +38,16 @@ function AddTopic() {
         course: courseId,
       });
 
+      // navigate(
+      //   `/trainer/dashboard/courses/topic/${courseId}`
+      // );
+
+
       navigate(
-        `/trainer/dashboard/courses/topic/${courseId}`
+        `/trainer/dashboard/courses/${courseId}/topics`
       );
+
+
     } catch (error) {
       console.log(error.response);
       console.log("ERROR STATUS:", error.response?.status);

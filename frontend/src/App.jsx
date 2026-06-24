@@ -1,58 +1,56 @@
 import { Routes, Route } from "react-router-dom";
 
+/* Common */
 import LandingPage from "./pages/common/LandingPage";
 import Home from "./pages/common/Home";
 import Login from "./pages/common/Login";
 import Register from "./pages/common/Register";
-import StudentDashboard from "./pages/student/StudentDashboard";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import TrainerDashboard from "./pages/trainer/TrainerDashboard";
+
+/* Admin */
 import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageTrainers from "./pages/admin/ManageTrainers";
-import AddTrainer from "./pages/admin/AddTrainer"
+import AddTrainer from "./pages/admin/AddTrainer";
 import AdminEditTrainer from "./pages/admin/AdminEditTrainer";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminManageStudents from "./pages/admin/AdminManageStudents";
+
+/* Trainer */
+import TrainerLayout from "./pages/trainer/TrainerLayout";
+import TrainerDashboardHome from "./pages/trainer/TrainerDashboardHome";
 import ManageCourses from "./pages/trainer/ManageCourses";
 import AddCourse from "./pages/trainer/AddCourse";
 import EditCourse from "./pages/trainer/EditCourse";
-import TrainerCourseTopic from "./pages/trainer/CourseTopics";
-import AddTopic from "./pages/trainer/AddTopic";
-import TrainerLayout from "./pages/trainer/TrainerLayout";
-import TrainerNavbar from "./pages/trainer/TrainerNavbar";
-import TrainerDashboardHome from "./pages/trainer/TrainerDashboardHome";
 import CourseTopics from "./pages/trainer/CourseTopics";
+import AddTopic from "./pages/trainer/AddTopic";
+import EditTopic from "./pages/trainer/EditTopic";
 
-import TrainerSidebar from "./pages/trainer/TrainerSidebar";
+/* Student */
+import StudentLayout from "./pages/student/StudentLayout";
+import StudentDashboardHome from "./pages/student/StudentDashboardHome";
+import Courses from "./pages/student/Courses";
+import CourseDetails from "./pages/student/CourseDetails";
+import TopicPlayer from "./pages/student/TopicPlayer";
 
 function App() {
   return (
     <Routes>
-      {/*public routes */}
+      {/* Public Routes */}
       <Route path="/" element={<LandingPage />}>
         <Route index element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
       </Route>
 
-
-
-
-      {/* Admin routes */}
-      {/* <Route path="/admin/dashboard" element={<AdminLayout />}
+      {/* Admin Routes */}
+      <Route
+        path="/admin/dashboard"
+        element={<AdminLayout />}
       >
-        <Route index element={<AdminDashboard />} />
-        <Route path="/admin/dashboard/manageTrainers" element={<ManageTrainers />} />
-        <Route path="/admin/dashboard/addTrainer" element={<AddTrainer />} />
-        <Route path="/admin/trainers/edit/:id" element={<AdminEditTrainer />}
+        <Route
+          index
+          element={<AdminDashboard />}
         />
-      </Route> */}
-
-      {/* spair admin routes */}
-
-
-      <Route path="/admin/dashboard" element={<AdminLayout />}>
-        <Route index element={<AdminDashboard />} />
 
         <Route
           path="profile"
@@ -65,7 +63,7 @@ function App() {
         />
 
         <Route
-          path="addTrainer"
+          path="trainers/add"
           element={<AddTrainer />}
         />
 
@@ -83,68 +81,100 @@ function App() {
       {/* Trainer Routes */}
       {/* <Route
         path="/trainer/dashboard"
-        element={<TrainerDashboard />}
-      /> */}
-      {/*Spair trainer routes */}
-      {/* <Route path="/trainer/dashboard" element={<TrainerLayout />}>
+        element={<TrainerLayout />}
+      >
+        <Route
+          index
+          element={<TrainerDashboardHome />}
+        />
 
-
-        <Route index element={<TrainerDashboardHome />} />
-        <Route index element={<TrainerDashboard />} />
-
-      
         <Route path="courses">
-          <Route index element={<ManageCourses />} />
-          <Route path="add" element={<AddCourse />} />
-          <Route path="edit/:id" element={<EditCourse />} />
+          <Route
+            index
+            element={<ManageCourses />}
+          />
+
+          <Route
+            path="add"
+            element={<AddCourse />}
+          />
+
+          <Route
+            path="edit/:id"
+            element={<EditCourse />}
+          />
+
+          <Route
+            path=":courseId/topics"
+            element={<CourseTopics />}
+          />
+
+          <Route
+            path=":courseId/topics/add"
+            element={<AddTopic />}
+          />
+
+          <Route
+            path="/trainer/dashboard/topics/edit/:topicId"
+            element={<EditTopic />}
+          />
         </Route>
-
       </Route> */}
-
-      {/*------------------*/}
-
-<Route
+      <Route
   path="/trainer/dashboard"
   element={<TrainerLayout />}
 >
+  <Route index element={<TrainerDashboardHome />} />
+
+  <Route path="courses">
+    <Route index element={<ManageCourses />} />
+    <Route path="add" element={<AddCourse />} />
+    <Route path="edit/:id" element={<EditCourse />} />
+
+    <Route
+      path=":courseId/topics"
+      element={<CourseTopics />}
+    />
+
+    <Route
+      path=":courseId/topics/add"
+      element={<AddTopic />}
+    />
+  </Route>
+
+  {/* ✅ FIXED: move OUTSIDE courses */}
   <Route
-    index
-    element={<ManageCourses />}
+    path="topics/edit/:topicId"
+    element={<EditTopic />}
   />
-
-  <Route
-    path="/trainer/dashboard/courses"
-    element={<ManageCourses />}
-  />
-
-  <Route
-    path="/trainer/dashboard/courses/add"
-    element={<AddCourse />}
-  />
-
-  <Route
-    path="/trainer/dashboard/courses/edit/:id"
-    element={<EditCourse />}
-  />
-
-  <Route
-  path="/trainer/dashboard/courses/topic/:courseId"
-  element={<CourseTopics />}
-/>
-
-<Route
-  path="/trainer/dashboard/courses/:courseId/topics/add"
-  element={<AddTopic />}
-/>
 </Route>
+
       {/* Student Routes */}
-      
+      <Route
+        path="/student/dashboard"
+        element={<StudentLayout />}
+      >
+        <Route
+          index
+          element={<StudentDashboardHome />}
+        />
 
+        <Route
+          path="courses"
+          element={<Courses />}
+        />
 
-  <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route
+          path="courses/:courseId"
+          element={<CourseDetails />}
+        />
 
+        <Route
+          path="courses/:courseId/topics/:topicId"
+          element={<TopicPlayer />}
+        />
+      </Route>
     </Routes>
-
   );
 }
 

@@ -1,65 +1,122 @@
 const Topic = require("../models/Topic");
 const Course = require("../models/Course");
 
-// Create Topic
-
-
+// CREATE TOPIC
 const createTopic = async (req, res) => {
     try {
+        console.log("BODY:", req.body);
+        console.log("USER:", req.user);
 
-         console.log("BODY:", req.body);
-    console.log("USER:", req.user);
-        const { topicName, description, videoUrl, course } = req.body;
-
-        const lastTopic = await Topic.findOne({ course })
-            .sort({ order: -1 });
-
-        const nextOrder = lastTopic ? lastTopic.order + 1 : 1;
-
-        const topic = await Topic.create({
-            trainer: req.user.id,
+        const {
             topicName,
             description,
             videoUrl,
             course,
+        } = req.body;
+
+        // Verify course belongs to trainer
+        const existingCourse =
+            await Course.findOne({
+                _id: course,
+                trainer: req.user.id,
+            });
+
+        if (!existingCourse) {
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Course not found or access denied",
+            });
+        }
+
+        // Auto calculate order
+        const lastTopic =
+            await Topic.findOne({
+                course,
+            }).sort({ order: -1 });
+
+        const nextOrder = lastTopic
+            ? lastTopic.order + 1
+            : 1;
+
+        const topic = await Topic.create({
+            trainer: req.user.id,
+            course,
+            topicName,
+            description,
+            videoUrl,
             order: nextOrder,
         });
 
-        res.status(201).json({
-            message: "Topic created successfully",
+        return res.status(201).json({
+            success: true,
+            message:
+                "Topic created successfully",
             topic,
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
     }
 };
-// Get Topics By Course
-const getTopicsByCourse = async (req, res) => {
+
+// GET ALL TOPICS OF A COURSE
+const getTopicsByCourse = async (
+    req,
+    res
+) => {
     try {
         const { courseId } = req.params;
 
+        // Verify trainer owns course
+        const course =
+            await Course.findOne({
+                _id: courseId,
+                trainer: req.user.id,
+            });
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Course not found or access denied",
+            });
+        }
+
         const topics = await Topic.find({
-             trainer: req.user.id,
             course: courseId,
         }).sort({ order: 1 });
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            data: topics,
+            count: topics.length,
+            topics,
         });
+
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message,
         });
     }
 };
 
-// Get Single Topic
-const getTopicById = async (req, res) => {
+// GET SINGLE TOPIC
+const getTopicById = async (
+    req,
+    res
+) => {
     try {
-        const topic = await Topic.findById(req.params.id);
+        const topic =
+            await Topic.findOne({
+                _id: req.params.id,
+                trainer: req.user.id,
+            });
 
         if (!topic) {
             return res.status(404).json({
@@ -68,29 +125,49 @@ const getTopicById = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            data: topic,
+            topic,
         });
+
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message,
         });
     }
 };
 
-// Update Topic
-const updateTopic = async (req, res) => {
+// UPDATE TOPIC
+const updateTopic = async (
+    req,
+    res
+) => {
     try {
-        const topic = await Topic.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+        const {
+            topicName,
+            description,
+            videoUrl,
+            order,
+        } = req.body;
+
+        const topic =
+            await Topic.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    trainer: req.user.id,
+                },
+                {
+                    topicName,
+                    description,
+                    videoUrl,
+                    order,
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                }
+            );
 
         if (!topic) {
             return res.status(404).json({
@@ -99,24 +176,32 @@ const updateTopic = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            data: topic,
+            message:
+                "Topic updated successfully",
+            topic,
         });
+
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message,
         });
     }
 };
 
-// Delete Topic
-const deleteTopic = async (req, res) => {
+// DELETE TOPIC
+const deleteTopic = async (
+    req,
+    res
+) => {
     try {
-        const topic = await Topic.findByIdAndDelete(
-            req.params.id
-        );
+        const topic =
+            await Topic.findOneAndDelete({
+                _id: req.params.id,
+                trainer: req.user.id,
+            });
 
         if (!topic) {
             return res.status(404).json({
@@ -125,12 +210,14 @@ const deleteTopic = async (req, res) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Topic deleted successfully",
+            message:
+                "Topic deleted successfully",
         });
+
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message,
         });
