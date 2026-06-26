@@ -27,10 +27,11 @@ import EditTopic from "./pages/trainer/EditTopic";
 
 /* Student */
 import StudentLayout from "./pages/student/StudentLayout";
-import StudentDashboardHome from "./pages/student/StudentDashboardHome";
+import StudentDashboard from "./pages/student/StudentDashboard";
 import Courses from "./pages/student/Courses";
 import CourseDetails from "./pages/student/CourseDetails";
 import TopicPlayer from "./pages/student/TopicPlayer";
+import StudentCourses from "./pages/student/StudentCourses";
 
 function App() {
   return (
@@ -156,13 +157,14 @@ function App() {
       >
         <Route
           index
-          element={<StudentDashboardHome />}
+          element={<StudentDashboard/>}
         />
 
         <Route
           path="courses"
-          element={<Courses />}
+          element={<StudentCourses />}
         />
+        
 
         <Route
           path="courses/:courseId"

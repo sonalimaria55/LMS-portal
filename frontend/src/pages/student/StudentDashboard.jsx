@@ -9,30 +9,36 @@ import {
   Grid,
   TextField,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
-
 import SearchIcon from "@mui/icons-material/Search";
-import API from "../../api/API";
 import { useNavigate } from "react-router-dom";
+import API from "../../api/API";
 
 function StudentDashboard() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   const fetchCourses = async () => {
     try {
-      const res = await API.get("/trainer/courses");
+      setLoading(true);
 
-      // ✅ ONLY published courses
-      const publishedCourses = (res.data.data || []).filter(
-        (course) => course.isPublished === true
-      );
+      const res = await API.get("/student/courses");
 
-      setCourses(publishedCourses);
+      console.log("Response:", res.data);
+
+      setCourses(res.data.courses || []);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching courses:", error);
+
+      if (error.response) {
+        console.log(error.response.data);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,12 +47,19 @@ function StudentDashboard() {
   }, []);
 
   const filteredCourses = courses.filter((course) =>
-    course.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    course?.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box p={3}>
-      {/* Header */}
+    <Box sx={{ p: 3 }}>
       <Typography variant="h4" fontWeight="bold" mb={3}>
         Student Dashboard
       </Typography>
@@ -57,13 +70,15 @@ function StudentDashboard() {
         placeholder="Search courses..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        sx={{ mb: 3 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
+        sx={{ mb: 4 }}
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          },
         }}
       />
 
@@ -77,7 +92,7 @@ function StudentDashboard() {
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  borderRadius: 3,
+                  borderRadius: 2,
                   boxShadow: 3,
                 }}
               >
@@ -93,6 +108,10 @@ function StudentDashboard() {
                   >
                     {course.description}
                   </Typography>
+
+                  <Typography variant="body2" sx={{ mt: 2 }}>
+                    <strong>Trainer:</strong> {course.trainer?.name}
+                  </Typography>
                 </CardContent>
 
                 <CardActions sx={{ mt: "auto", p: 2 }}>
@@ -100,7 +119,9 @@ function StudentDashboard() {
                     fullWidth
                     variant="contained"
                     onClick={() =>
-                      navigate(`/student/course/${course._id}`)
+                      navigate(
+                        `/student/dashboard/courses/${course._id}`
+                      )
                     }
                   >
                     View Course
@@ -110,9 +131,11 @@ function StudentDashboard() {
             </Grid>
           ))
         ) : (
-          <Typography sx={{ mt: 5, mx: "auto" }}>
-            No published courses available
-          </Typography>
+          <Grid item xs={12}>
+            <Typography align="center">
+              No published courses available
+            </Typography>
+          </Grid>
         )}
       </Grid>
     </Box>

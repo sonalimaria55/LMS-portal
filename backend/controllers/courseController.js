@@ -180,9 +180,29 @@ const publishCourse = async (req, res) => {
   }
 };
 
+
+// Get Published Courses (Student)
+const getPublishedCourses = async (req, res) => {
+  try {
+    const courses = await Course.find({
+      isPublished: true,
+    }).populate("trainer", "name email");
+
+    res.status(200).json({
+      success: true,
+      data: courses,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   createCourse,
   getAllCourses,
+  getPublishedCourses,
   getCourseById,
   updateCourse,
   deleteCourse,

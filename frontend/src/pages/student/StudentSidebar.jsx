@@ -28,7 +28,7 @@ function StudentSidebar() {
     {
       text: "Available Courses",
       icon: <SchoolIcon />,
-      path: "/student/dashboard",
+      path: "/student/dashboard/courses",
     },
     {
       text: "My Learning",

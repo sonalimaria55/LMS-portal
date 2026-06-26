@@ -1,8 +1,9 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import StudentNavbar from "./StudentNavbar";
 import StudentSidebar from "./StudentSidebar";
 
-function StudentLayout({ children }) {
+function StudentLayout() {
   return (
     <div
       style={{
@@ -33,7 +34,7 @@ function StudentLayout({ children }) {
             overflowY: "auto",
           }}
         >
-          {children}
+          <Outlet />
         </div>
       </div>
     </div>
