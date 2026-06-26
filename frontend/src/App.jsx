@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 
-/* Common */
+/* ================= Common ================= */
 import LandingPage from "./pages/common/LandingPage";
 import Home from "./pages/common/Home";
 import Login from "./pages/common/Login";
 import Register from "./pages/common/Register";
 
-/* Admin */
+/* ================= Admin ================= */
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageTrainers from "./pages/admin/ManageTrainers";
@@ -15,7 +15,7 @@ import AdminEditTrainer from "./pages/admin/AdminEditTrainer";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminManageStudents from "./pages/admin/AdminManageStudents";
 
-/* Trainer */
+/* ================= Trainer ================= */
 import TrainerLayout from "./pages/trainer/TrainerLayout";
 import TrainerDashboardHome from "./pages/trainer/TrainerDashboardHome";
 import ManageCourses from "./pages/trainer/ManageCourses";
@@ -25,157 +25,68 @@ import CourseTopics from "./pages/trainer/CourseTopics";
 import AddTopic from "./pages/trainer/AddTopic";
 import EditTopic from "./pages/trainer/EditTopic";
 
-/* Student */
+/* ================= Student ================= */
 import StudentLayout from "./pages/student/StudentLayout";
 import StudentDashboard from "./pages/student/StudentDashboard";
-import Courses from "./pages/student/Courses";
-import CourseDetails from "./pages/student/CourseDetails";
-import TopicPlayer from "./pages/student/TopicPlayer";
 import StudentCourses from "./pages/student/StudentCourses";
+import StudentCourseDetails from "./pages/student/StudentCourseDetails";
+
+/* 👇 IMPORTANT: MATCH YOUR REAL FILE NAMES */
+import MyLearning from "./pages/student/MyLearning";
+import Profile from "./pages/student/Profile";
 
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
+
+      {/* ================= PUBLIC ================= */}
       <Route path="/" element={<LandingPage />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Route>
 
-      {/* Admin Routes */}
-      <Route
-        path="/admin/dashboard"
-        element={<AdminLayout />}
-      >
-        <Route
-          index
-          element={<AdminDashboard />}
-        />
-
-        <Route
-          path="profile"
-          element={<AdminProfile />}
-        />
-
-        <Route
-          path="manageTrainers"
-          element={<ManageTrainers />}
-        />
-
-        <Route
-          path="trainers/add"
-          element={<AddTrainer />}
-        />
-
-        <Route
-          path="trainers/edit/:id"
-          element={<AdminEditTrainer />}
-        />
-
-        <Route
-          path="students"
-          element={<AdminManageStudents />}
-        />
+      {/* ================= ADMIN ================= */}
+      <Route path="/admin/dashboard" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="profile" element={<AdminProfile />} />
+        <Route path="manageTrainers" element={<ManageTrainers />} />
+        <Route path="trainers/add" element={<AddTrainer />} />
+        <Route path="trainers/edit/:id" element={<AdminEditTrainer />} />
+        <Route path="students" element={<AdminManageStudents />} />
       </Route>
 
-      {/* Trainer Routes */}
-      {/* <Route
-        path="/trainer/dashboard"
-        element={<TrainerLayout />}
-      >
-        <Route
-          index
-          element={<TrainerDashboardHome />}
-        />
+      {/* ================= TRAINER ================= */}
+      <Route path="/trainer/dashboard" element={<TrainerLayout />}>
+        <Route index element={<TrainerDashboardHome />} />
 
         <Route path="courses">
-          <Route
-            index
-            element={<ManageCourses />}
-          />
-
-          <Route
-            path="add"
-            element={<AddCourse />}
-          />
-
-          <Route
-            path="edit/:id"
-            element={<EditCourse />}
-          />
-
-          <Route
-            path=":courseId/topics"
-            element={<CourseTopics />}
-          />
-
-          <Route
-            path=":courseId/topics/add"
-            element={<AddTopic />}
-          />
-
-          <Route
-            path="/trainer/dashboard/topics/edit/:topicId"
-            element={<EditTopic />}
-          />
+          <Route index element={<ManageCourses />} />
+          <Route path="add" element={<AddCourse />} />
+          <Route path="edit/:id" element={<EditCourse />} />
+          <Route path=":courseId/topics" element={<CourseTopics />} />
+          <Route path=":courseId/topics/add" element={<AddTopic />} />
         </Route>
-      </Route> */}
-      <Route
-  path="/trainer/dashboard"
-  element={<TrainerLayout />}
->
-  <Route index element={<TrainerDashboardHome />} />
 
-  <Route path="courses">
-    <Route index element={<ManageCourses />} />
-    <Route path="add" element={<AddCourse />} />
-    <Route path="edit/:id" element={<EditCourse />} />
+        <Route path="topics/edit/:topicId" element={<EditTopic />} />
+      </Route>
 
-    <Route
-      path=":courseId/topics"
-      element={<CourseTopics />}
-    />
+      {/* ================= STUDENT ================= */}
+      <Route path="/student/dashboard/*" element={<StudentLayout />}>
+        <Route index element={<StudentDashboard />} />
 
-    <Route
-      path=":courseId/topics/add"
-      element={<AddTopic />}
-    />
-  </Route>
-
-  {/* ✅ FIXED: move OUTSIDE courses */}
-  <Route
-    path="topics/edit/:topicId"
-    element={<EditTopic />}
-  />
-</Route>
-
-      {/* Student Routes */}
-      <Route
-        path="/student/dashboard"
-        element={<StudentLayout />}
-      >
-        <Route
-          index
-          element={<StudentDashboard/>}
-        />
-
-        <Route
-          path="courses"
-          element={<StudentCourses />}
-        />
-        
+        <Route path="courses" element={<StudentCourses />} />
 
         <Route
           path="courses/:courseId"
-          element={<CourseDetails />}
+          element={<StudentCourseDetails />}
         />
 
-        <Route
-          path="courses/:courseId/topics/:topicId"
-          element={<TopicPlayer />}
-        />
+        <Route path="my-learning" element={<MyLearning />} />
+
+        <Route path="profile" element={<Profile />} />
       </Route>
+
     </Routes>
   );
 }

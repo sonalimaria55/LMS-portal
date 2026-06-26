@@ -222,3 +222,108 @@ module.exports = {
   deleteCourse,
   publishCourse,
 };
+
+
+LMS/
+│
+├── backend/
+│   │
+│   ├── config/
+│   │   ├── db.js
+│   │   └── mail.js
+│   │
+│   ├── controllers/
+│   │   ├── adminController.js
+│   │   ├── authController.js
+│   │   ├── courseController.js
+│   │   ├── OtpController.js
+│   │   ├── StudentController.js
+│   │   ├── StudentEnrollmentController.js
+│   │   └── topicController.js
+│   │
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   ├── isAdmin.js
+│   │   ├── isStudent.js
+│   │   ├── isTrainer.js
+│   │   └── upload.js
+│   │
+│   ├── models/
+│   │   ├── Course.js
+│   │   ├── Enrollment.js
+│   │   ├── OtpModel.js
+│   │   ├── Topic.js
+│   │   └── User.js
+│   │
+│   ├── routes/
+│   │   ├── AdminRoutes.js
+│   │   ├── authRoutes.js
+│   │   ├── courseRoutes.js
+│   │   ├── OtpRoutes.js
+│   │   ├── studentEnrollmentRoutes.js
+│   │   ├── StudentRoutes.js
+│   │   ├── topicRoutes.js
+│   │   └── userRoutes.js
+│   │
+│   ├── uploads/
+│   │
+│   ├── .env
+│   ├── index.js
+│   ├── package.json
+│   └── package-lock.json
+│
+└── frontend/
+    │
+    ├── src/
+    │   │
+    │   ├── api/
+    │   │   └── API.js
+    │   │
+    │   ├── assets/
+    │   │
+    │   ├── components/
+    │   │
+    │   ├── pages/
+    │   │   │
+    │   │   ├── admin/
+    │   │   │   ├── AddTrainer.jsx
+    │   │   │   ├── AdminDashboard.jsx
+    │   │   │   ├── AdminEditTrainer.jsx
+    │   │   │   ├── AdminLayout.jsx
+    │   │   │   ├── AdminManageStudents.jsx
+    │   │   │   ├── AdminNavbar.jsx
+    │   │   │   ├── AdminProfile.jsx
+    │   │   │   ├── AdminSidebar.jsx
+    │   │   │   └── ManageTrainers.jsx
+    │   │   │
+    │   │   ├── student/
+    │   │   │   ├── MyLearning.jsx
+    │   │   │   ├── Profile.jsx
+    │   │   │   ├── StudentCourseDetails.jsx
+    │   │   │   ├── StudentCourses.jsx
+    │   │   │   ├── StudentDashboard.jsx
+    │   │   │   ├── StudentLayout.jsx
+    │   │   │   ├── StudentNavbar.jsx
+    │   │   │   └── StudentSidebar.jsx
+    │   │   │
+    │   │   ├── trainer/
+    │   │   │   ├── AddCourse.jsx
+    │   │   │   ├── AddTopic.jsx
+    │   │   │   ├── CourseTopics.jsx
+    │   │   │   ├── EditCourse.jsx
+    │   │   │   ├── EditTopic.jsx
+    │   │   │   ├── ManageCourse.jsx
+    │   │   │   ├── TrainerDashboard.jsx
+    │   │   │   ├── TrainerDashboardHome.jsx
+    │   │   │   ├── TrainerLayout.jsx
+    │   │   │   ├── TrainerNavbar.jsx
+    │   │   │   └── TrainerSidebar.jsx
+    │   │   │
+    │   │   └── common/
+    │   │
+    │   ├── App.css
+    │   ├── App.jsx
+    │   └── main.jsx
+    │
+    ├── package.json
+    └── vite.config.js

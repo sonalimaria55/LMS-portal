@@ -1,6 +1,3 @@
-
-
-
 import {
   Box,
   Grid,
@@ -29,13 +26,14 @@ function StudentCourses() {
 
       const response = await API.get("/student/courses");
 
-      console.log("RESPONSE =", response.data);
+      console.log("Courses Response:", response.data);
 
       if (response.data.success) {
-        setCourses(response.data.data || []);
+        // Backend sends: { success, count, courses }
+        setCourses(response.data.courses || []);
       }
     } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.error(error);
 
       alert(
         error?.response?.data?.message ||
@@ -45,6 +43,28 @@ function StudentCourses() {
       setLoading(false);
     }
   };
+
+
+
+  const enrollCourse = async (courseId) => {
+  try {
+    const res = await API.post(
+      `/student/enroll/${courseId}`
+    );
+
+    alert(res.data.message);
+
+    // Refresh courses (optional for now)
+    getCourses();
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      error?.response?.data?.message ||
+      "Enrollment failed"
+    );
+  }
+};
 
   useEffect(() => {
     getCourses();
@@ -150,17 +170,25 @@ function StudentCourses() {
                 </CardContent>
 
                 <Box p={2}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={() =>
-                      navigate(
-                        `/student/courses/${course._id}`
-                      )
-                    }
-                  >
-                    View Course
-                  </Button>
+                 <Box display="flex" gap={1}>
+  <Button
+    fullWidth
+    variant="outlined"
+    onClick={() => enrollCourse(course._id)}
+  >
+    Enroll
+  </Button>
+
+  <Button
+    fullWidth
+    variant="contained"
+    onClick={() =>
+      navigate(`/student/dashboard/courses/${course._id}`)
+    }
+  >
+    View
+  </Button>
+</Box>
                 </Box>
               </Card>
             </Grid>
