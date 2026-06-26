@@ -56,8 +56,34 @@ const getCourseTopics = async (req, res) => {
     });
   }
 };
+// Get single topic
+const getTopicById = async (req, res) => {
+  try {
+    const { topicId } = req.params;
+
+    const topic = await Topic.findById(topicId);
+
+    if (!topic) {
+      return res.status(404).json({
+        success: false,
+        message: "Topic not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      topic,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   getPublishedCourses,
   getCourseTopics,
+  getTopicById,
 };
