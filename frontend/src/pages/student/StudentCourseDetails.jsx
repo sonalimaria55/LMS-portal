@@ -71,9 +71,17 @@ function StudentCourseDetails() {
   }
 
   // ✅ Pre-calculate embed URL (important improvement)
+  // const embedUrl = selectedTopic
+  //   ? getDriveEmbedUrl(selectedTopic.videoUrl)
+  //   : "";
+
+
+
   const embedUrl = selectedTopic
     ? getDriveEmbedUrl(selectedTopic.videoUrl)
     : "";
+
+  ;
 
   return (
     <Box
